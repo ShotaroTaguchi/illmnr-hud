@@ -58,17 +58,18 @@ def engine_panel(x0: int, y0: int) -> dict:
     items.append(text("engine.rpm.unit", rx + 86, y0 + 74, 34, 20, "rpm", size=11, color=DIM, align="left"))
 
     # left block: temperatures, mirroring the right block
+    # engineTemperature matches the in-car "Oil T" gauge, so it is shown as OIL
     temps = [
-        ("WATER", f"[{RAW}.car.engine.engineCoolantTemperature]"),
-        ("RADIATOR", f"[{RAW}.car.engine.radiatorCoolantTemperature]"),
-        ("ENGINE", f"[{RAW}.car.engine.engineTemperature]"),
+        ("water", "WATER", f"[{RAW}.car.engine.engineCoolantTemperature]"),
+        ("radwater", "RAD WATER", f"[{RAW}.car.engine.radiatorCoolantTemperature]"),
+        ("oil", "OIL", f"[{RAW}.car.engine.engineTemperature]"),
     ]
     lx0 = x0 + SIDE
-    for i, (label, raw) in enumerate(temps):
+    for i, (name, label, raw) in enumerate(temps):
         y = y0 + 34 + i * 22
-        key = f"engine.{label.lower()}"
-        items.append(text(f"{key}.label", lx0, y, 70, 20, label, size=12, color=DIM, align="left"))
-        items.append(text(key, lx0 + 70, y, 42, 20, "0", size=15, bold=True, align="right",
+        key = f"engine.{name}"
+        items.append(text(f"{key}.label", lx0, y, 74, 20, label, size=12, color=DIM, align="left"))
+        items.append(text(key, lx0 + 72, y, 40, 20, "0", size=15, bold=True, align="right",
                           bindings=[formula("Text", c_of(raw), "0"),
                                     gradient("TextColor", c_of(raw),
                                              [(WATER_OK - 30, BLUE), (WATER_OK, WHITE), (WATER_HOT, RED)])]))

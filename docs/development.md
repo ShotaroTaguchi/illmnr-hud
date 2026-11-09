@@ -57,7 +57,7 @@ NGP は 664 バイトの UDP パケットを送り、SimHub では全項目が `
 | ギア | `control.gear` | 0=R, 1=N, 2=1速… |
 | 操作入力 | `control.steering / throttle / brake / handbrake / clutch` | 0〜1（ステア -1〜1） |
 | 速度・回転数 | `car.speed`、`car.engine.rpm` | km/h、rpm |
-| エンジン温度 | `car.engine.engineCoolantTemperature / radiatorCoolantTemperature / engineTemperature` | K |
+| 水温 / ラジエーター水温 / 油温 | `car.engine.engineCoolantTemperature / radiatorCoolantTemperature / engineTemperature` | K |
 | 姿勢・G | `car.roll / pitch / yaw`、`car.accelerations.surge / sway / heave` | |
 | ステージ | `stage.progress / raceTime / distanceToEnd` | m / 秒 / m |
 
@@ -71,7 +71,7 @@ NGP は 664 バイトの UDP パケットを送り、SimHub では全項目が `
 | タイヤ | `wheel.tire.pressure`、`treadTemperature / carcassTemperature / temperature` | Pa、K |
 | タイヤ摩耗 | `wheel.tire.segment1〜8.wear`（8区画の使用量） | 0〜1 |
 
-- 温度はケルビン（`- 273.15` で℃）
+- 温度はケルビン（`- 273.15` で℃）。`engineTemperature` は車両メーターの Oil T と一致したので油温として扱う
 - 実走で確認済み：ギア、速度、回転数、エンジン温度、タイヤ温度・空気圧・摩耗。その他は未確認
 
 SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR で動作確認済み）：
