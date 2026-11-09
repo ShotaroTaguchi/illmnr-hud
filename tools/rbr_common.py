@@ -21,7 +21,7 @@ ORANGE = "#FFFF6A00"
 RED = "#FFE8202A"
 
 PAD = 8
-AUTHOR = "Shotaro T"
+AUTHOR = "ShotaroTaguchi"  # GitHub account, so the dashboards can be traced back to this repo
 
 
 def c_of(expr_kelvin: str) -> str:

@@ -136,6 +136,22 @@ def vbar(name: str, x, y, w, h, color: str, back: str = "#40FFFFFF",
     return it
 
 
+def hbar(name: str, x, y, w, h, color: str, back: str = "#40FFFFFF",
+         minimum: float = 0, maximum: float = 100, from_right: bool = False,
+         bindings: list[dict] | None = None) -> dict:
+    """Horizontal bar gauge filling from the left (or from the right with from_right=True).
+    Prefer gauges over binding Width: Width bindings did not update in SimHub 9.13."""
+    it = _base(
+        "LinearGaugeItem", name, x, y, w, h, bindings,
+        IsLinearGauge=True, GaugeOrientation=0, GaugeAlignment=2 if from_right else 0,
+        BackgroundImage="None", AutoSize=False, GaugeColor=color,
+        AlternateGaugeColor=color, UseAlternateStyle=False,
+        Minimum=float(minimum), Maximum=float(maximum), Value=0.0, Steps=0.0, PAW=float(w),
+    )
+    it["BackgroundColor"] = back
+    return it
+
+
 def layer(name: str, items: list[dict], x=0, y=0, w=0, h=0) -> dict:
     it = _base("Layer", name, x, y, w, h, None,
                Repetitions=0.0, RepeatLeftOffset=0.0, RepeatTopOffset=0.0,
@@ -153,7 +169,8 @@ def scale(items: list[dict], sx: float, sy: float | None = None) -> list[dict]:
     s = min(sx, sy)
 
     def walk(it: dict) -> None:
-        for k, f in (("Left", sx), ("Width", sx), ("Top", sy), ("Height", sy), ("PAW", sy),
+        paw = sx if it.get("IsLinearGauge") else sy  # gauge length: horizontal vs vertical gauge
+        for k, f in (("Left", sx), ("Width", sx), ("Top", sy), ("Height", sy), ("PAW", paw),
                      ("FontSize", s), ("EllipseThickness", s)):
             if k in it:
                 it[k] = round(it[k] * f, 1)
@@ -227,6 +244,9 @@ def write_simhubdash(dash: dict, meta: dict, name: str, out_dir: Path) -> Path:
     metadata = json.dumps(meta, ensure_ascii=False, indent=2)
     path = out_dir / f"{name}.simhubdash"
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr(f"{name}/{name}.djson", djson)
-        z.writestr(f"{name}/{name}.djson.metadata", metadata)
+        for arcname, data in ((f"{name}/{name}.djson", djson), (f"{name}/{name}.djson.metadata", metadata)):
+            # fixed timestamp: unchanged dashboards produce byte-identical files (clean git diffs)
+            info = zipfile.ZipInfo(arcname, date_time=(2020, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, data)
     return path

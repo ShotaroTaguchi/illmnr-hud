@@ -3,7 +3,7 @@
     python tools/build_rbr_time.py   ->  dist/RBR_Time.simhubdash, dist/RBR_Delta.simhubdash
 """
 from rbr_common import DIM, GREEN, PAD, PANEL, RAW, RED, TRACK, WHITE, build
-from simhubdash import formula, gradient, layer, rect, text
+from simhubdash import formula, gradient, hbar, layer, rect, text
 
 # ---- tuning ----
 SCALE = 1.2
@@ -39,22 +39,21 @@ def delta() -> dict:
     d = f"isnull({DELTA}, 0)"
     expr = f"if(isnull({DELTA}), '--.--', if({DELTA} > 0, '+', '') + format({DELTA}, '0.00'))"
 
-    # bar: faster (negative delta) -> green grows to the right, slower (positive) -> red grows to the left
+    # bar: faster (negative delta) -> green grows to the right, slower (positive) -> red grows to the left.
+    # Two gauges meet at the center; linear, DELTA_BAR_RANGE seconds = full half (1 s of 10 s -> 10%).
+    # Only if() is used (known to work); the gauges clamp at their Maximum.
     bx, by, bw, bh = PAD + 12, PAD + PH - 12, PW - 24, 5
     cx, half = bx + bw / 2, bw / 2
-    # linear: DELTA_BAR_RANGE seconds = full half-bar (e.g. 1 s of 10 s -> 10%).
-    # Width/Left bindings are not touched by scale(), so the expressions carry SCALE themselves
-    green_w = f"min(1, max(0, -{d}) / {DELTA_BAR_RANGE}) * {half * SCALE}"
-    red_w = f"min(1, max(0, {d}) / {DELTA_BAR_RANGE}) * {half * SCALE}"
+    faster = f"if({d} < 0, -{d}, 0)"
+    slower = f"if({d} > 0, {d}, 0)"
     return panel("delta", "DELTA", [
         text("delta.value", PAD, PAD + 12, PW, 40, "--.--", size=32, bold=True,
              bindings=[formula("Text", expr),
                        gradient("TextColor", d, [(-DELTA_RANGE, GREEN), (0, WHITE), (DELTA_RANGE, RED)])]),
-        rect("delta.bar.track", bx, by, bw, bh, TRACK, radius=2),
-        rect("delta.bar.faster", cx, by, 0, bh, GREEN, radius=2,
-             bindings=[formula("Width", green_w)]),
-        rect("delta.bar.slower", cx, by, 0, bh, RED, radius=2,
-             bindings=[formula("Width", red_w), formula("Left", f"{cx * SCALE} - {red_w}")]),
+        hbar("delta.bar.slower", bx, by, half, bh, RED, back=TRACK, maximum=DELTA_BAR_RANGE,
+             from_right=True, bindings=[formula("Value", slower)]),
+        hbar("delta.bar.faster", cx, by, half, bh, GREEN, back=TRACK, maximum=DELTA_BAR_RANGE,
+             bindings=[formula("Value", faster)]),
         rect("delta.bar.center", cx - 1, by - 3, 2, bh + 6, WHITE),
     ])
 
