@@ -16,6 +16,7 @@ dist/                      # 生成物。公開用にコミットする
 python tools/build_rbr_engine.py    # -> dist/RBR_Engine.simhubdash
 python tools/build_rbr_tyres.py     # -> dist/RBR_Tyres.simhubdash
 python tools/build_rbr_inputs.py    # -> dist/RBR_Inputs.simhubdash
+python tools/build_rbr_time.py      # -> dist/RBR_Time.simhubdash, dist/RBR_Delta.simhubdash
 ```
 
 Python 3.10+、標準ライブラリのみ。同名のダッシュボードを取り込むと上書きされる（SimHub が旧版をバックアップする）。
@@ -33,6 +34,7 @@ Python 3.10+、標準ライブラリのみ。同名のダッシュボードを�
 - `.djson` は Newtonsoft JSON（`$id` / `$values`）。`simhubdash.py` が自動で付ける
 - フィールド構成は SimHub 9.13 の書き出しに合わせている。読めなくなったら Dash Studio で保存したファイルと見比べる
 - ハンドルのスポークやマークは「中心を揃えた四角の、片側の枠線だけ描く」ことで、回転の中心をハンドル中心に合わせている
+- `Width` / `Left` などを式で動かす場合、`scale()` は式の中までは変えないので、式に倍率を掛けておく（Delta のバー）
 
 ## RBR オーバーレイの調整用定数
 
@@ -45,6 +47,9 @@ Python 3.10+、標準ライブラリのみ。同名のダッシュボードを�
 | | `TYRE_COLD / OK / HOT` | タイヤ色の境目（℃） | 40 / 70 / 100 |
 | `build_rbr_inputs.py` | `STEER_LOCK_DEG` | ハンドル表示の回転角（ロック to ロック） | 540 |
 | | `STEER_SIGN` | 回転方向（逆なら -1） | 1 |
+| `build_rbr_time.py` | `SCALE` | Time / Delta の既定サイズの倍率 | 1.2 |
+| | `DELTA_RANGE` | Delta の数字が完全な緑／赤になる差（秒） | 1.0 |
+| | `DELTA_BAR_RANGE` | Delta のバーが端まで伸びる差（秒、比例） | 10.0 |
 | `rbr_common.py` | 色定数・`AUTHOR` | 全オーバーレイ共通 | |
 
 ### RBR（NGP）のプロパティ

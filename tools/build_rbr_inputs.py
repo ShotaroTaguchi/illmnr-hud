@@ -17,7 +17,7 @@ PEDALS = [             # (label, NGP control field, color)
 
 W, H = 310, 150
 RIM = "#FFE6EBF0"
-HUB = "#FF1A1F25"
+HUB = "#FF000000"
 
 
 def steering_wheel(cx: float, cy: float, d: float) -> dict:

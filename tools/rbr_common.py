@@ -10,7 +10,7 @@ GD = "DataCorePlugin.GameData.NewData"
 K = 273.15  # NGP temperatures are Kelvin
 
 # ---- colors (#AARRGGBB) ----
-PANEL = "#FF101418"  # opaque so in-car gauges underneath don't show through
+PANEL = "#FF000000"  # opaque black so in-car gauges underneath don't show through
 WHITE = "#FFFFFFFF"
 DIM = "#FF9AA4AE"
 TRACK = "#40FFFFFF"  # empty part of bars
