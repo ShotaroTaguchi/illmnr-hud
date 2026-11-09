@@ -6,8 +6,9 @@ from rbr_common import BLUE, DIM, GD, GREEN, ORANGE, PAD, PANEL, RAW, RED, WHITE
 from simhubdash import formula, gradient, layer, rect, text
 
 # ---- tuning ----
-# Coolant / engine temperature (deg C) -> text color: blue (cold) -> white -> red (hot).
+# Temperature (deg C) -> text color: blue (cold, OK - 30) -> white (OK) -> red (HOT).
 WATER_OK, WATER_HOT = 90, 110
+OIL_OK, OIL_HOT = 110, 130  # oil runs hotter than coolant; ~120 is normal
 # Shift lights: RPM percent thresholds (SimHub's displayed RPM %, per-car redline) and colors.
 SHIFT_LIGHTS = [
     (55, GREEN), (60, GREEN), (65, GREEN),
@@ -60,19 +61,19 @@ def engine_panel(x0: int, y0: int) -> dict:
     # left block: temperatures, mirroring the right block
     # engineTemperature matches the in-car "Oil T" gauge, so it is shown as OIL
     temps = [
-        ("water", "WATER", f"[{RAW}.car.engine.engineCoolantTemperature]"),
-        ("radwater", "RAD WATER", f"[{RAW}.car.engine.radiatorCoolantTemperature]"),
-        ("oil", "OIL", f"[{RAW}.car.engine.engineTemperature]"),
+        ("water", "WATER", f"[{RAW}.car.engine.engineCoolantTemperature]", WATER_OK, WATER_HOT),
+        ("radwater", "RAD WATER", f"[{RAW}.car.engine.radiatorCoolantTemperature]", WATER_OK, WATER_HOT),
+        ("oil", "OIL", f"[{RAW}.car.engine.engineTemperature]", OIL_OK, OIL_HOT),
     ]
     lx0 = x0 + SIDE
-    for i, (name, label, raw) in enumerate(temps):
+    for i, (name, label, raw, ok, hot) in enumerate(temps):
         y = y0 + 34 + i * 22
         key = f"engine.{name}"
         items.append(text(f"{key}.label", lx0, y, 74, 20, label, size=12, color=DIM, align="left"))
         items.append(text(key, lx0 + 72, y, 40, 20, "0", size=15, bold=True, align="right",
                           bindings=[formula("Text", c_of(raw), "0"),
                                     gradient("TextColor", c_of(raw),
-                                             [(WATER_OK - 30, BLUE), (WATER_OK, WHITE), (WATER_HOT, RED)])]))
+                                             [(ok - 30, BLUE), (ok, WHITE), (hot, RED)])]))
         items.append(text(f"{key}.unit", lx0 + 114, y, 20, 20, "°C", size=11, color=DIM, align="left"))
 
     return layer("Engine", items, x0, y0, PW, PH)

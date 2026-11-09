@@ -44,7 +44,8 @@ Python 3.10+、標準ライブラリのみ。同名のダッシュボードを�
 |---|---|---|---|
 | `build_rbr_engine.py` | `SCALE_X / SCALE_Y` | 既定サイズの倍率（レイアウトは1倍で記述） | 1.5 / 1.6 |
 | | `SHIFT_LIGHTS` | シフトライトの点灯％と色 | 55〜95% |
-| | `WATER_OK / WATER_HOT` | 温度の文字色（℃） | 90 / 110 |
+| | `WATER_OK / WATER_HOT` | 水温の文字色：白になる温度 / 赤になる温度（℃。OK−30℃で青） | 90 / 110 |
+| | `OIL_OK / OIL_HOT` | 油温の文字色（同上） | 110 / 130 |
 | `build_rbr_tyres.py` | `SCALE` | 既定サイズの倍率 | 0.75 |
 | | `TYRE_COLD / OK / HOT` | タイヤ色の境目（℃） | 40 / 70 / 100 |
 | `build_rbr_inputs.py` | `STEER_LOCK_DEG` | ハンドル表示の回転角（ロック to ロック） | 540 |
@@ -83,3 +84,7 @@ NGP は 664 バイトの UDP パケットを送り、SimHub では全項目が `
 
 SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR で動作確認済み）：
 `Gear`、`SpeedKmh`、`Rpms`、`CarSettings_CurrentDisplayedRPMPercent`（車ごとのレッドライン基準の％）、`CarSettings_RPMRedLineReached`
+
+## TODO
+
+- オーバーレイ名が `RBR_*` だと、ほかの人が配布している RBR 用ダッシュボードと SimHub 上で混ざる。固有の接頭辞を付けて改名する（ファイル名・タイトル・README を合わせて変更）
