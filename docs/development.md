@@ -16,7 +16,7 @@ rbrhud/build_*.py          # RBRHUD 版
 dist/                      # 生成物。公開用にコミットする
 ├── simhub/<game>/ILLMNR_<GAME>_<Name>.simhubdash
 └── rbrhud/OverlayElements/{Custom,textures}/ILLMNR_<Name>.*
-build.py                   # 全部ビルド
+build.py                   # 全部ビルド ＋ RBRHUD の配布用 zip（dist/rbrhud/ILLMNR-HUD_RBRHUD.zip）
 docs/make_logo.py          # README のロゴ（design の色から生成）
 ```
 

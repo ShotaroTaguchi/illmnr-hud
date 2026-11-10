@@ -17,7 +17,7 @@ from illmnr.rbrhud import FONT_BOLD, Element
 S = 1.0
 PW, PH = 294, 134   # panel (1x), same as simhub/rbr/build_inputs.py (310x150 overlay minus padding)
 WHEEL_D = 108
-CX, CY = 64, 54     # wheel center inside the panel
+CX, CY = 72, 62     # wheel center inside the panel (same as SimHub: 8px from the top edge)
 PEDALS = [("CLU", "InputClutchProcessed", BLUE), ("BRK", "InputBrakeProcessed", RED),
           ("THR", "InputThrottleProcessed", GREEN), ("HB", "InputHandbrakeProcessed", ORANGE)]
 RIM = (230, 235, 240, 255)
@@ -47,7 +47,7 @@ def main() -> None:
     for key in gears:
         el.tex_text(key, key[4:], 30, 46, 46, bold=True)
 
-    bw, gap, bh, x0, y0 = 22, 14, 90, 150, 10
+    bw, gap, bh, x0, y0 = 22, 14, 90, 158, 10
     el.tex_rect("Bar", bw, bh)
     for label, _, _ in PEDALS:
         el.tex_text(f"L{label}", label, 10, bw + 16, 14, align="center")

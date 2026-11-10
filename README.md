@@ -56,9 +56,12 @@ Tyres は RBRHUD にタイヤ温度・空気圧のデータが無いので、Sim
 
 **使い方**
 
-1. `dist/rbrhud/OverlayElements` を、RBR の `Plugins/RBRHUD/` にフォルダごとコピーする（`Custom/` と `textures/` にファイルが追加される）
-2. ゲーム中（リプレイ中）に **F4** → **Tools → Overlay Editor** で、表示中のオーバーレイに `Custom → ILLMNR_Engine` を追加する
+1. `dist/rbrhud/ILLMNR-HUD_RBRHUD.zip` をダウンロードし、**RBR のフォルダ**（`RichardBurnsRally_SSE.exe` がある場所）に展開する
+   - `Plugins/RBRHUD/OverlayElements/` の `Custom/` と `textures/` に、`ILLMNR_` で始まるファイルが追加されるだけ（既存のファイルは上書きしない）
+2. ゲーム中かリプレイ中に **F4** → **Tools → Overlay Editor** を開き、表示中のオーバーレイに `Custom` → `ILLMNR_Engine` などを **Add** する
 3. 位置と大きさを調整して保存する
+
+アンインストールは、`Custom/` と `textures/` の `ILLMNR_*` を消すだけ。
 
 ## 自分で改造する
 
