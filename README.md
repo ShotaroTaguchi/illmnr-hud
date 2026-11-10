@@ -2,8 +2,10 @@
 
 ![ILLMNR-HUD](docs/images/logo.png)
 
-黒くシンプルな、統一デザインの HUD 集（illuminer ＝ 照らす）。
-同じデザインを、SimHub（いろいろなゲームで使える）と RBRHUD（Richard Burns Rally のゲーム内、リプレイ対応）に書き出している。
+**Illuminate what matters.**
+
+走りに必要な情報だけを、真っ黒なパネルにくっきりと。
+ILLMNR-HUD は、ひとつのデザインを SimHub と RBRHUD に書き出すシムレース用 HUD です。ゲームが変わっても、リプレイでも、同じ見た目で。
 
 ![RBR overlays](docs/images/rbr-overlays.png)
 
