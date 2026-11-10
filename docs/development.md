@@ -135,6 +135,39 @@ NGP は 664 バイトの UDP パケットを送り、SimHub では全項目が `
 SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR で動作確認済み）：
 `Gear`、`SpeedKmh`、`Rpms`、`CarSettings_CurrentDisplayedRPMPercent`（車ごとのレッドライン基準の％）、`CarSettings_RPMRedLineReached`
 
+## デザインの経緯（決めたことと、やめた案）
+
+照太郎が実機で見て決めたこと。理由ごと残しておく。
+
+- **パネルは真っ黒・不透明**（`#FF000000`）。半透明（69%→92%）は車両のメーターが透けて読みにくく、青みがかった黒（`#101418`）より真っ黒が好み
+- **Engine は横長**：中央に大きなギア、右に速度と回転数、左に温度3つを左右対称に。最初の縦長はやめた
+- **温度のラベル**：`ENGINE` は何の温度か分からない → 車両メーターの Oil T と一致したので `OIL`。`RADIATOR` → `RAD WATER`。
+  油温は水温と別の色の基準（110 / 130℃）。水温の基準のままだと普通の油温でも赤くなった
+- **Tyres は1輪1タイル**：参考にした既存オーバーレイの上下分割は分かりにくくカクカクしていたのでやめた。背景色をなめらかに変える。
+  タイルはやや縦長（84×100）、摩耗バーは外側（左のタイヤは左端、右は右端）。内側だと隣のタイルのバーに見えた
+- **Delta のバー**：比例で 10 秒で端まで（照太郎の指定）。平方根のカーブ（小さい差で大きく伸びる）は提案したが不採用。数字の色は 1 秒で完全な緑／赤
+- **既定サイズ**：Engine 1.5×1.6、Tyres 0.75、Inputs 1.0、Time/Delta/Stage 1.2（照太郎の指定。数字はざっくりでよいと言われている）
+- **ロゴ**：シフトライト10色＋「ILLMNR」白・「-HUD」グレー、下に「heads-up display for sim racing · by illuminer」
+- ATOM 側（boards-sandbox）の LED は緑・黄・橙・赤、シフトポイントで赤点滅（青点滅は不採用）
+
+## 照太郎の実機環境（2026-11 時点）
+
+- 画面 1920×1080。Windows、Python 3.12.10、SimHub 9.13.2、RSF Installation V1.59.3、MOZA Pit House 1.4.1.13（R5 ＋ ES ステアリング）
+- SimHub のレイアウト `RBR-Telemetry`（左上の座標と大きさ, px）：
+  Time (1,4) 240×98 / Delta (1,101) 240×98 / Stage (2,982) 240×98 / Engine (647,887) 624×208 /
+  Inputs (1302,930) 310×150 / Brakes (1763,789) 156×123 / Tyres (1763,912) 156×168
+  → タイム系は左上、Engine は下中央、Inputs とタイヤ系は右下。サイズを変えるときは周りとの兼ね合いに注意
+- RBRHUD はリプレイ用オーバーレイ（`Replay_ShowInfo_Simple.ini`）に配置：Time・Delta は左上、Engine（倍率 0.75 に縮小）と Inputs は下中央
+
+## 仮の値・確認状況
+
+- Brakes の色の境目（150 / 350 / 650℃）は**根拠のない仮の値**（実データを見ていない）。摩耗の向き（0＝新品）も未確認。
+  SimHub 上で「表示されること」は確認済み
+- RBRHUD の Time・Delta・Engine・Inputs はリプレイ中の表示を確認済み（Delta は 0.00 の状態のみ。差が付いたときの色とバーの向きは未確認）。
+  Inputs のハンドルが上の縁に当たっていたのは修正済みだが、修正後の表示は未確認
+- サスペンション（`springDeflection`）と G（`accelerations`）は**実データを一度も見ていない**（範囲・単位・符号の向きは不明）
+- 次に作るゲームはまだ決めていない（プロパティの調査も未着手）。リリースは v0.1.0 のみ
+
 ## メンテナンスのメモ
 
 - **寸法は `illmnr/design.py` に1か所だけ**（パネルの左上が基準）。SimHub は `PAD` を足し、RBRHUD はそのまま使う。
@@ -149,6 +182,6 @@ SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR �
 
 ## TODO
 
-- 実機で確認：RBRHUD の Inputs / Time / Delta（位置の基準、伸びる向き、書式）、SimHub の Brakes（温度の範囲、摩耗の向き）と Stage
+- 実機で確認：RBRHUD の Delta（差が付いたときの色とバーの向き）と Inputs（修正後の位置）、SimHub の Brakes（温度の範囲、摩耗の向き）
 - 候補：サスペンションのストローク、G（単位と向きを実データで確かめてから）
 - ほかのゲームの SimHub 版（`simhub/<game>/`）
