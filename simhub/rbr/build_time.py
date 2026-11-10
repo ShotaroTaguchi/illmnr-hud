@@ -1,9 +1,15 @@
 """Build the RBR stage time and delta overlays (same size, place them freely).
 
-    python tools/build_rbr_time.py   ->  dist/RBR_Time.simhubdash, dist/RBR_Delta.simhubdash
+    python simhub/rbr/build_time.py   ->  dist/simhub/rbr/RBR_Time.simhubdash, RBR_Delta.simhubdash
 """
-from rbr_common import DIM, GREEN, PAD, PANEL, RAW, RED, TRACK, WHITE, build
-from simhubdash import formula, gradient, hbar, layer, rect, text
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root, for the illmnr package
+
+from illmnr.design import DIM, GREEN, PAD, PANEL, RED, TRACK, WHITE
+from illmnr.rbr import RAW, build
+from illmnr.simhubdash import formula, gradient, hbar, layer, rect, text
 
 # ---- tuning ----
 SCALE = 1.2

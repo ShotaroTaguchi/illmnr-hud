@@ -1,19 +1,25 @@
-"""Build an RBRHUD version of RBR Engine (works in replays, unlike the SimHub overlay).
+"""RBRHUD / RBR: engine element (works in replays, unlike the SimHub overlay).
 
-    .venv/Scripts/python tools/build_rbrhud_engine.py
-      -> rbrhud/OverlayElements/textures/SHD_Engine.png + .ini   (texture atlas)
-      -> rbrhud/OverlayElements/Custom/SHD_Engine.element         (element)
+    .venv/Scripts/python rbrhud/build_engine.py
+      -> dist/rbrhud/OverlayElements/textures/SHD_Engine.png + .ini   (texture atlas)
+      -> dist/rbrhud/OverlayElements/Custom/SHD_Engine.element         (element)
 
-Copy the rbrhud/OverlayElements folder into  <RBR>/Plugins/RBRHUD/  and add
+Copy dist/rbrhud/OverlayElements into  <RBR>/Plugins/RBRHUD/  and add
 "Custom/SHD_Engine.element" to an overlay with RBRHUD's in-game Overlay Editor.
 
-Same layout as build_rbr_engine.py. Needs Pillow (requirements: pillow).
+Same layout as simhub/rbr/build_engine.py (illmnr.design). Needs Pillow (requirements.txt).
 """
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = Path(__file__).resolve().parent.parent / "rbrhud" / "OverlayElements"
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repo root, for the illmnr package
+
+from illmnr import design
+from illmnr.design import ENGINE_H as PH, ENGINE_SIDE as SIDE, ENGINE_W as PW, hud
+
+ROOT = Path(__file__).resolve().parents[1] / "dist" / "rbrhud" / "OverlayElements"
 NAME = "SHD_Engine"
 S = 1.5  # pixel scale of the 1x layout (same default size as the SimHub overlay)
 
@@ -21,18 +27,14 @@ FONT_BOLD = "C:/Windows/Fonts/segoeuib.ttf"
 FONT_REG = "C:/Windows/Fonts/segoeui.ttf"
 
 # colors as RBRHUD AARRGGBB (lowercase, no #)
-WHITE, DIM = "ffffffff", "ff9aa4ae"
-GREEN, YELLOW, ORANGE, RED = "ff2dbe5a", "ffffc800", "ffff6a00", "ffe8202a"
-SHIFT_LIGHTS = [(55, GREEN), (60, GREEN), (65, GREEN), (70, YELLOW), (75, YELLOW), (80, YELLOW),
-                (84, ORANGE), (88, ORANGE), (92, RED), (95, RED)]
+WHITE, DIM, RED = hud(design.WHITE), hud(design.DIM), hud(design.RED)
+SHIFT_LIGHTS = [(threshold, hud(color)) for threshold, color in design.SHIFT_LIGHTS]
 
 # Number elements use bitmap fonts embedded in this element's own atlas (an element can only use
 # one atlas, so RBRHUD's built-in fonts such as Bahnschrift are not available here).
 # (font name, ttf, size at 1x)
 FONTS = {"SHD_NumBold": (FONT_BOLD, 34), "SHD_Num": (FONT_REG, 18)}
 FONT_CHARS = " 0123456789-.:%+"
-
-PW, PH, SIDE = 400, 114, 12  # 1x panel layout (see build_rbr_engine.py)
 
 
 def px(v: float) -> int:

@@ -1,31 +1,30 @@
-"""Build the RBR (NGP UDP) engine overlay: shift lights, gear, speed, rpm, temperatures.
+"""SimHub / RBR: engine overlay (shift lights, gear, speed, rpm, temperatures).
 
-    python tools/build_rbr_engine.py   ->  dist/RBR_Engine.simhubdash
+    python simhub/rbr/build_engine.py   ->  dist/simhub/rbr/RBR_Engine.simhubdash
 """
-from rbr_common import BLUE, DIM, GD, GREEN, ORANGE, PAD, PANEL, RAW, RED, WHITE, YELLOW, build, c_of
-from simhubdash import formula, gradient, layer, rect, text
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root, for the illmnr package
+
+from illmnr.design import (BLUE, DIM, ENGINE_H as PH, ENGINE_SIDE as SIDE, ENGINE_W as PW, PAD, PANEL, RED,
+                           SHIFT_LIGHTS, WHITE)
+from illmnr.rbr import GD, RAW, build, c_of
+from illmnr.simhubdash import formula, gradient, layer, rect, text
 
 # ---- tuning ----
 # Temperature (deg C) -> text color: blue (cold, OK - 30) -> white (OK) -> red (HOT).
 WATER_OK, WATER_HOT = 90, 110
 OIL_OK, OIL_HOT = 110, 130  # oil runs hotter than coolant; ~120 is normal
-# Shift lights: RPM percent thresholds (SimHub's displayed RPM %, per-car redline) and colors.
-SHIFT_LIGHTS = [
-    (55, GREEN), (60, GREEN), (65, GREEN),
-    (70, YELLOW), (75, YELLOW), (80, YELLOW),
-    (84, ORANGE), (88, ORANGE),
-    (92, RED), (95, RED),
-]
+# Shift lights: illmnr.design.SHIFT_LIGHTS (SimHub's displayed RPM %, per-car redline)
 
 #  ┌────────────── shift lights ──────────────┐
 #  │ WATER     80°C              57 km/h      │
-#  │ RADIATOR  51°C      2     1957 rpm       │
-#  │ ENGINE    91°C                           │
+#  │ RAD WATER 51°C      2     1957 rpm       │
+#  │ OIL       91°C                           │
 #  └──────────────────────────────────────────┘
-SCALE_X, SCALE_Y = 1.5, 1.6  # default overlay size relative to the 1x layout below
-PW, PH = 400, 114  # panel size (1x)
+SCALE_X, SCALE_Y = 1.5, 1.6  # default overlay size relative to the 1x layout (illmnr.design.ENGINE_*)
 W, H = PW + 2 * PAD, PH + 2 * PAD
-SIDE = 12          # inner margin of the left / right blocks
 
 
 def engine_panel(x0: int, y0: int) -> dict:

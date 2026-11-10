@@ -1,9 +1,15 @@
 """Build the RBR (NGP UDP) tyre overlay: 4 tiles colored by tread temperature.
 
-    python tools/build_rbr_tyres.py   ->  dist/RBR_Tyres.simhubdash
+    python simhub/rbr/build_tyres.py   ->  dist/simhub/rbr/RBR_Tyres.simhubdash
 """
-from rbr_common import BLUE, GREEN, PAD, RAW, RED, WHITE, build, c_of
-from simhubdash import formula, gradient, layer, rect, text, vbar
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root, for the illmnr package
+
+from illmnr.design import BLUE, GREEN, PAD, RED, WHITE
+from illmnr.rbr import RAW, build, c_of
+from illmnr.simhubdash import formula, gradient, layer, rect, text, vbar
 
 # ---- tuning ----
 # Tread temperature (deg C) -> tile color: blue (cold) -> green (ok) -> red (hot).

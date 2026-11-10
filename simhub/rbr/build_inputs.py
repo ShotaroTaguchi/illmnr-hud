@@ -1,9 +1,15 @@
 """Build the RBR (NGP UDP) driver input overlay: steering wheel + pedals.
 
-    python tools/build_rbr_inputs.py   ->  dist/RBR_Inputs.simhubdash
+    python simhub/rbr/build_inputs.py   ->  dist/simhub/rbr/RBR_Inputs.simhubdash
 """
-from rbr_common import BLUE, DIM, GD, GREEN, ORANGE, PAD, PANEL, RAW, RED, TRACK, build
-from simhubdash import ellipse, formula, layer, rect, text, vbar
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root, for the illmnr package
+
+from illmnr.design import BLUE, DIM, GREEN, ORANGE, PAD, PANEL, RED, TRACK
+from illmnr.rbr import GD, RAW, build
+from illmnr.simhubdash import ellipse, formula, layer, rect, text, vbar
 
 # ---- tuning ----
 STEER_LOCK_DEG = 540   # displayed wheel rotation lock-to-lock (input -1..1 -> -270..+270 deg)
