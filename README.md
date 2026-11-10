@@ -1,5 +1,7 @@
 # ILLMNR-HUD
 
+![ILLMNR-HUD](docs/images/logo.png)
+
 黒くシンプルな、統一デザインの HUD 集（illuminer ＝ 照らす）。
 同じデザインを、SimHub（いろいろなゲームで使える）と RBRHUD（Richard Burns Rally のゲーム内、リプレイ対応）に書き出している。
 
@@ -23,6 +25,8 @@
 | `ILLMNR_RBR_Inputs.simhubdash` | ハンドル（中央にギア、下に切れ角）、クラッチ・ブレーキ・アクセル・サイドブレーキの踏み込み量 |
 | `ILLMNR_RBR_Time.simhubdash` | ステージの経過タイム（0.1秒単位） |
 | `ILLMNR_RBR_Delta.simhubdash` | ベストタイムとの差。数字は速いと緑・遅いと赤。下のバーは中央から、速いと緑が右へ・遅いと赤が左へ伸びる（10秒で端まで）。同じステージ・車でベストの記録が必要（SimHub が自動で記録） |
+| `ILLMNR_RBR_Brakes.simhubdash` | 4輪のブレーキディスク温度。Tyres と同じタイル型で、色で温度（青＝冷えている、緑＝使える温度、赤＝熱すぎ）、外側の白いバー＝ディスクの残り |
+| `ILLMNR_RBR_Stage.simhubdash` | ゴールまでの残り距離（km）と、ステージを何％走ったか（バー） |
 
 **使い方**
 
@@ -44,6 +48,11 @@ RSF Launcher の空いている行に `127.0.0.1` : `6777` を追加し、SimHub
 | エレメント | 表示 |
 |---|---|
 | `Custom/ILLMNR_Engine.element` | SimHub 版 Engine と同じ見た目。温度はゲームの警告で赤、シフトアップのタイミングでシフトライトが赤点滅 |
+| `Custom/ILLMNR_Inputs.element` | ハンドル（実際のハンドル角で回転、中央にギア）とペダル4本 |
+| `Custom/ILLMNR_Time.element` | ステージの経過タイム |
+| `Custom/ILLMNR_Delta.element` | RBRHUD のデルタタイマー（F4 メニューの Delta Timers）との差。数字とバーは SimHub 版と同じ |
+
+Tyres は RBRHUD にタイヤ温度・空気圧のデータが無いので、SimHub 版のみ。
 
 **使い方**
 

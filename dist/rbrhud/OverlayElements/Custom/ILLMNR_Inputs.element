@@ -1,0 +1,345 @@
+[main]
+author = ShotaroTaguchi
+atlas = textures\ILLMNR_Inputs.ini
+description = ILLMNR RBR Inputs
+autohidewhennodamage = false
+autohidetime = 5.000000
+type = simple
+
+[panel]
+type = Static
+mode = 0
+xpos = 0.000000
+ypos = 0.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Panel
+
+[wheel]
+type = Rotating
+mode = 0
+xpos = 64.000000
+ypos = 54.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Wheel
+data = InputSteeringDeg
+digital = 1
+rotation0deg = -1800.000000
+rotation0value = -1800.000000
+rotation1deg = 1800.000000
+rotation1value = 1800.000000
+
+[gear_gearr]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = GearR
+data = Gear
+equal = 0
+
+[gear_gearn]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = GearN
+data = Gear
+equal = 1
+
+[gear_gear1]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear1
+data = Gear
+equal = 2
+
+[gear_gear2]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear2
+data = Gear
+equal = 3
+
+[gear_gear3]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear3
+data = Gear
+equal = 4
+
+[gear_gear4]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear4
+data = Gear
+equal = 5
+
+[gear_gear5]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear5
+data = Gear
+equal = 6
+
+[gear_gear6]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear6
+data = Gear
+equal = 7
+
+[gear_gear7]
+type = Simple
+mode = 0
+xpos = 41.000000
+ypos = 29.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear7
+data = Gear
+equal = 8
+
+[track_clu]
+type = Static
+mode = 0
+xpos = 150.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = 40ffffff
+texture = Bar
+
+[bar_clu]
+type = Expanding
+mode = 0
+xpos = 150.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff2f7de1
+texture = Bar
+data = InputClutchProcessed
+expandmap0value = 0.000000
+expandmap0expand = 0.000000
+expandmap1value = 1.000000
+expandmap1expand = 1.000000
+direction = up
+
+[pct_clu]
+type = Number
+data = InputClutchProcessed
+mode = 0
+xpos = 161.000000
+ypos = 101.800000
+scale = 0.400000
+rotation = 0.000000
+colour = ffffffff
+font = ILLMNR_NumBold
+format = Percentage
+justification = Center
+prefixenabled = false
+suffixenabled = false
+
+[label_clu]
+type = Static
+mode = 0
+xpos = 142.000000
+ypos = 118.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = LCLU
+
+[track_brk]
+type = Static
+mode = 0
+xpos = 186.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = 40ffffff
+texture = Bar
+
+[bar_brk]
+type = Expanding
+mode = 0
+xpos = 186.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffe8202a
+texture = Bar
+data = InputBrakeProcessed
+expandmap0value = 0.000000
+expandmap0expand = 0.000000
+expandmap1value = 1.000000
+expandmap1expand = 1.000000
+direction = up
+
+[pct_brk]
+type = Number
+data = InputBrakeProcessed
+mode = 0
+xpos = 197.000000
+ypos = 101.800000
+scale = 0.400000
+rotation = 0.000000
+colour = ffffffff
+font = ILLMNR_NumBold
+format = Percentage
+justification = Center
+prefixenabled = false
+suffixenabled = false
+
+[label_brk]
+type = Static
+mode = 0
+xpos = 178.000000
+ypos = 118.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = LBRK
+
+[track_thr]
+type = Static
+mode = 0
+xpos = 222.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = 40ffffff
+texture = Bar
+
+[bar_thr]
+type = Expanding
+mode = 0
+xpos = 222.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff2dbe5a
+texture = Bar
+data = InputThrottleProcessed
+expandmap0value = 0.000000
+expandmap0expand = 0.000000
+expandmap1value = 1.000000
+expandmap1expand = 1.000000
+direction = up
+
+[pct_thr]
+type = Number
+data = InputThrottleProcessed
+mode = 0
+xpos = 233.000000
+ypos = 101.800000
+scale = 0.400000
+rotation = 0.000000
+colour = ffffffff
+font = ILLMNR_NumBold
+format = Percentage
+justification = Center
+prefixenabled = false
+suffixenabled = false
+
+[label_thr]
+type = Static
+mode = 0
+xpos = 214.000000
+ypos = 118.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = LTHR
+
+[track_hb]
+type = Static
+mode = 0
+xpos = 258.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = 40ffffff
+texture = Bar
+
+[bar_hb]
+type = Expanding
+mode = 0
+xpos = 258.000000
+ypos = 10.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffff6a00
+texture = Bar
+data = InputHandbrakeProcessed
+expandmap0value = 0.000000
+expandmap0expand = 0.000000
+expandmap1value = 1.000000
+expandmap1expand = 1.000000
+direction = up
+
+[pct_hb]
+type = Number
+data = InputHandbrakeProcessed
+mode = 0
+xpos = 269.000000
+ypos = 101.800000
+scale = 0.400000
+rotation = 0.000000
+colour = ffffffff
+font = ILLMNR_NumBold
+format = Percentage
+justification = Center
+prefixenabled = false
+suffixenabled = false
+
+[label_hb]
+type = Static
+mode = 0
+xpos = 250.000000
+ypos = 118.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = LHB

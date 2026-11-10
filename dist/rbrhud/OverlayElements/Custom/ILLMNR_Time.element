@@ -1,0 +1,42 @@
+[main]
+author = ShotaroTaguchi
+atlas = textures\ILLMNR_Time.ini
+description = ILLMNR RBR Time
+autohidewhennodamage = false
+autohidetime = 5.000000
+type = simple
+
+[panel]
+type = Static
+mode = 0
+xpos = 0.000000
+ypos = 0.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Panel
+
+[label]
+type = Static
+mode = 0
+xpos = 12.000000
+ypos = 5.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = Label
+
+[value]
+type = Number
+data = RaceTime
+mode = 0
+xpos = 110.000000
+ypos = 18.500000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+font = ILLMNR_NumBold
+format = TimeMinSecM
+justification = Center
+prefixenabled = false
+suffixenabled = false

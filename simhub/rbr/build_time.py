@@ -30,6 +30,21 @@ def panel(name: str, label: str, value: list[dict]) -> dict:
     ], x0, y0, PW, PH)
 
 
+def stage_progress() -> dict:
+    """Distance left to the finish (big) and how much of the stage is done (bar + %)."""
+    driven = f"[{RAW}.stage.progress]"
+    left = f"[{RAW}.stage.distanceToEnd]"
+    pct = f"if({driven} + {left} > 0, {driven} / ({driven} + {left}) * 100, 0)"
+    bx, by, bw, bh = PAD + 12, PAD + PH - 12, PW - 24, 5
+    return panel("stage", "STAGE", [
+        text("stage.pct", PAD + PW - 60, PAD + 4, 50, 14, "0%", size=10, color=DIM, bold=True, align="right",
+             bindings=[formula("Text", f"format({pct}, '0') + '%'")]),
+        text("stage.left", PAD, PAD + 12, PW, 40, "0.0 km", size=30, bold=True,
+             bindings=[formula("Text", f"format({left} / 1000, '0.0') + ' km'")]),
+        hbar("stage.bar", bx, by, bw, bh, WHITE, back=TRACK, maximum=100, bindings=[formula("Value", pct)]),
+    ])
+
+
 def stage_time() -> dict:
     # tenths are truncated (not rounded) so 59.96 s never shows as "00:60.0"
     tenths = f"floor([{RAW}.stage.raceTime] * 10)"
@@ -69,3 +84,5 @@ if __name__ == "__main__":
           W, H, [stage_time()], sx=SCALE)
     build("RBR_Delta", "RBR Delta", "Live delta to best time for Richard Burns Rally",
           W, H, [delta()], sx=SCALE)
+    build("RBR_Stage", "RBR Stage", "Distance to finish and stage progress for Richard Burns Rally",
+          W, H, [stage_progress()], sx=SCALE)

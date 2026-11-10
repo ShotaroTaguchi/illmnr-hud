@@ -1,0 +1,102 @@
+[main]
+author = ShotaroTaguchi
+atlas = textures\ILLMNR_Delta.ini
+description = ILLMNR RBR Delta
+autohidewhennodamage = false
+autohidetime = 5.000000
+type = simple
+
+[panel]
+type = Static
+mode = 0
+xpos = 0.000000
+ypos = 0.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Panel
+
+[label]
+type = Static
+mode = 0
+xpos = 12.000000
+ypos = 5.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = Label
+
+[slower]
+type = Effect
+effecttype = ColourChange|
+data = DeltaTime
+threshold = 0.001000
+newcolour = ffe8202a
+
+[value]
+type = Number
+data = DeltaTime
+mode = 0
+xpos = 110.000000
+ypos = 12.500000
+scale = 1.000000
+rotation = 0.000000
+colour = ff2dbe5a
+font = ILLMNR_NumBold
+format = Decimal2
+justification = Center
+prefixenabled = false
+suffixenabled = false
+effect = slower
+
+[track]
+type = Static
+mode = 0
+xpos = 14.000000
+ypos = 65.000000
+scale = 1.000000
+rotation = 0.000000
+colour = 40ffffff
+texture = Track
+
+[faster]
+type = Expanding
+mode = 0
+xpos = 110.000000
+ypos = 65.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff2dbe5a
+texture = Half
+data = DeltaTime
+expandmap0value = 0.000000
+expandmap0expand = 0.000000
+expandmap1expand = 1.000000
+expandmap1value = -10.000000
+direction = right
+
+[slower_bar]
+type = Expanding
+mode = 0
+xpos = 14.000000
+ypos = 65.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffe8202a
+texture = Half
+data = DeltaTime
+expandmap0value = 0.000000
+expandmap0expand = 0.000000
+expandmap1expand = 1.000000
+expandmap1value = 10.000000
+direction = left
+
+[center]
+type = Static
+mode = 0
+xpos = 109.000000
+ypos = 61.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Center

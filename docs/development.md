@@ -9,13 +9,15 @@ Dash Studio や RBRHUD のエディタで手作業で組まない。
 illmnr/                    # 共通パッケージ
 ├── design.py              # デザインの本体：配色、PREFIX/AUTHOR、Engine パネルの寸法、シフトライト
 ├── simhubdash.py          # SimHub 用部品：rect / text / ellipse / vbar / hbar / layer、formula / gradient、zip 出力
-└── rbr.py                 # SimHub × RBR：NGP のプロパティ名、build()
+├── rbr.py                 # SimHub × RBR：NGP のプロパティ名、build()
+└── rbrhud.py              # RBRHUD 用：Element（アトラス生成・数字フォント埋め込み・.element 出力）
 simhub/<game>/build_*.py   # SimHub 版（1ファイル = 1オーバーレイ。Time/Delta だけ1ファイルで2つ）
 rbrhud/build_*.py          # RBRHUD 版
 dist/                      # 生成物。公開用にコミットする
 ├── simhub/<game>/ILLMNR_<GAME>_<Name>.simhubdash
 └── rbrhud/OverlayElements/{Custom,textures}/ILLMNR_<Name>.*
 build.py                   # 全部ビルド
+docs/make_logo.py          # README のロゴ（design の色から生成）
 ```
 
 ```
@@ -74,8 +76,12 @@ Overlays/*.ini                    # どのエレメントをどこに出すか�
 
 ### 新しいエレメントを足す
 
-`rbrhud/build_engine.py` を雛形に、SimHub 版と同じ1倍レイアウト（`illmnr.design`）から作る。
-次の候補：Inputs（既存の `Default/InputDisplay.element` の `Rotating` / `Expanding` が参考になる）、Time / Delta。
+`illmnr.rbrhud.Element` で、SimHub 版と同じ1倍レイアウトから作る（`rbrhud/build_*.py` が例）。
+
+- `Rotating` は中心座標で置く（既存の InputDisplay から推定）。Inputs のハンドルは `InputSteeringDeg` を 1:1 で回す
+- `Expanding` は `expandmap0/1value → expand` の対応で伸びる。`direction` は up / down / left / right
+- 効果の条件：`ColourChange` / `Blink` は `threshold` を超えたとき、`Show` は `limit` 未満、`Hide` は `threshold` を超えたとき
+- Number の `format`：Whole、Decimal1/2、Percentage、TimeMinSec、TimeMinSecM/Ms/Msc、TimeSeconds、Padded3/4
 
 ## 調整用の定数
 
@@ -94,7 +100,9 @@ Overlays/*.ini                    # どのエレメントをどこに出すか�
 | `simhub/rbr/build_time.py` | `SCALE` | Time / Delta の既定サイズの倍率 | 1.2 |
 | | `DELTA_RANGE` | Delta の数字が完全な緑／赤になる差（秒） | 1.0 |
 | | `DELTA_BAR_RANGE` | Delta のバーが端まで伸びる差（秒、比例） | 10.0 |
-| `rbrhud/build_engine.py` | `S` | 1倍レイアウトに掛ける倍率（SimHub 版と同じ大きさ） | 1.5 |
+| `simhub/rbr/build_brakes.py` | `BRAKE_COLD / OK / HOT` | ブレーキ色の境目（℃。仮の値） | 150 / 350 / 650 |
+| `rbrhud/build_*.py` | `S` | 1倍レイアウトに掛ける倍率（SimHub 版と同じ大きさ） | Engine 1.5、Time/Delta 1.2、Inputs 1.0 |
+| `rbrhud/build_time.py` | `DELTA_BAR_RANGE` | Delta のバーが端まで伸びる差（秒） | 10.0 |
 
 ## RBR（NGP）のプロパティ（SimHub）
 
@@ -129,5 +137,6 @@ SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR �
 
 ## TODO
 
-- RBRHUD 版の Inputs / Time / Delta
+- 実機で確認：RBRHUD の Inputs / Time / Delta（位置の基準、伸びる向き、書式）、SimHub の Brakes（温度の範囲、摩耗の向き）と Stage
+- 候補：サスペンションのストローク、G（単位と向きを実データで確かめてから）
 - ほかのゲームの SimHub 版（`simhub/<game>/`）
