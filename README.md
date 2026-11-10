@@ -73,3 +73,7 @@ Tyres は RBRHUD にタイヤ温度・空気圧のデータが無いので、Sim
 ## 自分で改造する
 
 レイアウト・色・しきい値は Python で生成している。詳しくは [docs/development.md](docs/development.md)。
+
+## ライセンス
+
+[MIT](LICENSE)。自由に使って改造してかまいません（作者表記だけ残してください）。
