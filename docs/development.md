@@ -135,6 +135,18 @@ NGP は 664 バイトの UDP パケットを送り、SimHub では全項目が `
 SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR で動作確認済み）：
 `Gear`、`SpeedKmh`、`Rpms`、`CarSettings_CurrentDisplayedRPMPercent`（車ごとのレッドライン基準の％）、`CarSettings_RPMRedLineReached`
 
+## メンテナンスのメモ
+
+- **寸法は `illmnr/design.py` に1か所だけ**（パネルの左上が基準）。SimHub は `PAD` を足し、RBRHUD はそのまま使う。
+  出力先ごとに数値を書き写すとずれる（RBRHUD の Inputs でハンドルが上の縁に当たったのは、`PAD` を引き忘れたため）
+- 構成だけを変える変更は、ビルド前後で `dist/` のチェックサムが変わらないことを確かめる（生成は決定的）
+- ロゴは `docs/make_logo.py` で生成（design の色から）。ロゴも RBRHUD のテクスチャも Windows のフォント（Bahnschrift、Segoe UI）を使うので、Windows でビルドする
+- README の画面写真（`docs/images/rbr-overlays.png`、`rbrhud-replay.png`）は実機のスクリーンショット。見た目を変えたら撮り直す
+- **名前を変えると、置いた位置が外れる**：SimHub はレイアウト（`OverlayLayouts/*.olayout`）が `DashTemplates\<名前>\<名前>.djson` で、
+  RBRHUD はオーバーレイ（`Plugins/RBRHUD/Overlays/*.ini`）が `Custom/<名前>.element` で参照している。改名するときはこの参照も書き換える
+- リリース：`build.py` → コミット → `gh release create vX.Y.Z dist/rbrhud/ILLMNR-HUD_RBRHUD.zip dist/simhub/rbr/*.simhubdash`
+- コミットのメールは GitHub の匿名アドレス（このリポジトリと PC 全体の git 設定で指定済み）
+
 ## TODO
 
 - 実機で確認：RBRHUD の Inputs / Time / Delta（位置の基準、伸びる向き、書式）、SimHub の Brakes（温度の範囲、摩耗の向き）と Stage

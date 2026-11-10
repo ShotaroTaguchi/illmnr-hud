@@ -9,12 +9,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repo root, for the illmnr package
 
-from illmnr.design import DIM, GREEN, RED, TRACK, WHITE, hud
+from illmnr.design import DIM, GREEN, RED, SMALL_H, SMALL_W, TRACK, WHITE, hud
 from illmnr.rbrhud import FONT_BOLD, Element
 
 S = 1.2                # same default size as the SimHub Time / Delta
 DELTA_BAR_RANGE = 10.0  # seconds at which the delta bar reaches the end
-PW, PH = 184, 66        # panel (1x), same as simhub/rbr/build_time.py
+PW, PH = SMALL_W, SMALL_H  # panel (1x), shared with simhub/rbr/build_time.py
 
 
 def panel(name: str, label: str) -> Element:

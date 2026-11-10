@@ -11,13 +11,13 @@ from PIL import Image, ImageDraw
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repo root, for the illmnr package
 
-from illmnr.design import BLUE, DIM, GREEN, ORANGE, RED, TRACK, WHITE
+from illmnr.design import (BLUE, DIM, GREEN, INPUTS_H, INPUTS_W, ORANGE, PEDAL_GAP, PEDAL_H, PEDAL_W, PEDAL_X0,
+                           PEDAL_Y0, RED, TRACK, WHEEL_CX, WHEEL_CY, WHEEL_D, WHITE)
 from illmnr.rbrhud import FONT_BOLD, Element
 
 S = 1.0
-PW, PH = 294, 134   # panel (1x), same as simhub/rbr/build_inputs.py (310x150 overlay minus padding)
-WHEEL_D = 108
-CX, CY = 72, 62     # wheel center inside the panel (same as SimHub: 8px from the top edge)
+PW, PH = INPUTS_W, INPUTS_H  # panel-relative layout shared with simhub/rbr/build_inputs.py
+CX, CY = WHEEL_CX, WHEEL_CY
 PEDALS = [("CLU", "InputClutchProcessed", BLUE), ("BRK", "InputBrakeProcessed", RED),
           ("THR", "InputThrottleProcessed", GREEN), ("HB", "InputHandbrakeProcessed", ORANGE)]
 RIM = (230, 235, 240, 255)
@@ -47,7 +47,7 @@ def main() -> None:
     for key in gears:
         el.tex_text(key, key[4:], 30, 46, 46, bold=True)
 
-    bw, gap, bh, x0, y0 = 22, 14, 90, 158, 10
+    bw, gap, bh, x0, y0 = PEDAL_W, PEDAL_GAP, PEDAL_H, PEDAL_X0, PEDAL_Y0
     el.tex_rect("Bar", bw, bh)
     for label, _, _ in PEDALS:
         el.tex_text(f"L{label}", label, 10, bw + 16, 14, align="center")

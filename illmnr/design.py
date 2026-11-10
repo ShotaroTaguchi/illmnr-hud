@@ -27,6 +27,15 @@ SHIFT_LIGHTS = [
     (92, RED), (95, RED),
 ]
 
+# ---- Inputs panel (1x, measured from the panel's top-left; SimHub adds PAD around it) ----
+INPUTS_W, INPUTS_H = 294, 134
+WHEEL_CX, WHEEL_CY, WHEEL_D = 72, 62, 108       # wheel center and diameter
+PEDAL_X0, PEDAL_Y0 = 158, 10                    # top-left of the first pedal bar
+PEDAL_W, PEDAL_GAP, PEDAL_H = 22, 14, 90
+
+# ---- Small panels: Time / Delta / Stage (1x) ----
+SMALL_W, SMALL_H = 184, 66
+
 
 def hud(color: str) -> str:
     """'#AARRGGBB' -> RBRHUD 'aarrggbb'."""

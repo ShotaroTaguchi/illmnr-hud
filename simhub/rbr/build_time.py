@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root, for the illmnr package
 
-from illmnr.design import DIM, GREEN, PAD, PANEL, RED, TRACK, WHITE
+from illmnr.design import DIM, GREEN, PAD, PANEL, RED, SMALL_H, SMALL_W, TRACK, WHITE
 from illmnr.rbr import RAW, build
 from illmnr.simhubdash import formula, gradient, hbar, layer, rect, text
 
@@ -16,7 +16,7 @@ SCALE = 1.2
 DELTA_RANGE = 1.0      # seconds at which the delta text reaches full green / red
 DELTA_BAR_RANGE = 10.0  # seconds at which the delta bar reaches the end
 
-PW, PH = 184, 66  # panel size (1x)
+PW, PH = SMALL_W, SMALL_H  # panel size (1x), shared with rbrhud/build_time.py
 W, H = PW + 2 * PAD, PH + 2 * PAD
 DELTA = "[PersistantTrackerPlugin.AllTimeBestLiveDeltaSeconds]"  # SimHub: live delta to all-time best
 

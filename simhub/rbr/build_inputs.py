@@ -7,7 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root, for the illmnr package
 
-from illmnr.design import BLUE, DIM, GREEN, ORANGE, PAD, PANEL, RED, TRACK
+from illmnr.design import (BLUE, DIM, GREEN, INPUTS_H, INPUTS_W, ORANGE, PAD, PANEL,
+                           PEDAL_GAP, PEDAL_H, PEDAL_W, PEDAL_X0, PEDAL_Y0, RED, TRACK, WHEEL_CX, WHEEL_CY, WHEEL_D)
 from illmnr.rbr import GD, RAW, build
 from illmnr.simhubdash import ellipse, formula, layer, rect, text, vbar
 
@@ -21,7 +22,7 @@ PEDALS = [             # (label, NGP control field, color)
     ("HB", "handbrake", ORANGE),
 ]
 
-W, H = 310, 150
+W, H = INPUTS_W + 2 * PAD, INPUTS_H + 2 * PAD
 RIM = "#FFE6EBF0"
 HUB = "#FF000000"
 
@@ -50,7 +51,7 @@ def steering_wheel(cx: float, cy: float, d: float) -> dict:
 
 
 def pedals(x0: float, y0: float) -> dict:
-    bw, gap, bh = 22, 14, 90
+    bw, gap, bh = PEDAL_W, PEDAL_GAP, PEDAL_H
     items = []
     for i, (label, field, color) in enumerate(PEDALS):
         x = x0 + i * (bw + gap)
@@ -69,6 +70,6 @@ if __name__ == "__main__":
           "Steering wheel and pedal inputs for Richard Burns Rally (NGP UDP telemetry)",
           W, H, [
               rect("bg", PAD, PAD, W - 2 * PAD, H - 2 * PAD, PANEL, radius=8),
-              steering_wheel(cx=PAD + 72, cy=PAD + 62, d=108),
-              pedals(x0=PAD + 158, y0=PAD + 10),
+              steering_wheel(cx=PAD + WHEEL_CX, cy=PAD + WHEEL_CY, d=WHEEL_D),
+              pedals(x0=PAD + PEDAL_X0, y0=PAD + PEDAL_Y0),
           ])
