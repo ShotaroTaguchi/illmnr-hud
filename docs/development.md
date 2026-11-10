@@ -88,3 +88,4 @@ SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR �
 ## TODO
 
 - オーバーレイ名が `RBR_*` だと、ほかの人が配布している RBR 用ダッシュボードと SimHub 上で混ざる。固有の接頭辞を付けて改名する（ファイル名・タイトル・README を合わせて変更）
+- リプレイ中も表示できる RBRHUD 版を作る（方向性は [rbrhud.md](rbrhud.md)）
