@@ -1,0 +1,441 @@
+[main]
+author = ShotaroTaguchi
+atlas = textures\SHD_Engine.ini
+description = RBR Engine (simhub-dashboards style)
+autohidewhennodamage = false
+autohidetime = 5.000000
+type = simple
+
+[upshift]
+type = Effect
+effecttype = Blink|ColourChange|
+data = UpShift
+blinkspeed = 150.000000
+newcolour = ffe8202a
+
+[coolanthot]
+type = Effect
+effecttype = ColourChange|
+data = CoolantTemperatureWarning
+newcolour = ffe8202a
+
+[oilhot]
+type = Effect
+effecttype = ColourChange|
+data = OilTemperatureWarning
+newcolour = ffe8202a
+
+[panel]
+type = Static
+mode = 0
+xpos = 0.000000
+ypos = 0.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Panel
+
+[shift1]
+type = Simple
+mode = 0
+xpos = 108.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff2dbe5a
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 55.000000
+rangemax = 1000.000000
+
+[shift2]
+type = Simple
+mode = 0
+xpos = 147.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff2dbe5a
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 60.000000
+rangemax = 1000.000000
+
+[shift3]
+type = Simple
+mode = 0
+xpos = 186.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff2dbe5a
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 65.000000
+rangemax = 1000.000000
+
+[shift4]
+type = Simple
+mode = 0
+xpos = 225.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffc800
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 70.000000
+rangemax = 1000.000000
+
+[shift5]
+type = Simple
+mode = 0
+xpos = 264.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffc800
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 75.000000
+rangemax = 1000.000000
+
+[shift6]
+type = Simple
+mode = 0
+xpos = 303.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffc800
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 80.000000
+rangemax = 1000.000000
+
+[shift7]
+type = Simple
+mode = 0
+xpos = 342.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffff6a00
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 84.000000
+rangemax = 1000.000000
+
+[shift8]
+type = Simple
+mode = 0
+xpos = 381.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffff6a00
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 88.000000
+rangemax = 1000.000000
+
+[shift9]
+type = Simple
+mode = 0
+xpos = 420.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffe8202a
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 92.000000
+rangemax = 1000.000000
+
+[shift10]
+type = Simple
+mode = 0
+xpos = 459.000000
+ypos = 12.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffe8202a
+texture = Led
+data = RPMPercent
+effect = upshift
+rangemin = 95.000000
+rangemax = 1000.000000
+
+[gear_gearr]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = GearR
+data = Gear
+equal = 0
+
+[gear_gearn]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = GearN
+data = Gear
+equal = 1
+
+[gear_gear1]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear1
+data = Gear
+equal = 2
+
+[gear_gear2]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear2
+data = Gear
+equal = 3
+
+[gear_gear3]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear3
+data = Gear
+equal = 4
+
+[gear_gear4]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear4
+data = Gear
+equal = 5
+
+[gear_gear5]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear5
+data = Gear
+equal = 6
+
+[gear_gear6]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear6
+data = Gear
+equal = 7
+
+[gear_gear7]
+type = Simple
+mode = 0
+xpos = 232.000000
+ypos = 27.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+texture = Gear7
+data = Gear
+equal = 8
+
+[speed]
+type = Number
+data = SpeedKPH
+mode = 0
+xpos = 528.000000
+ypos = 40.500000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+font = SHD_NumBold
+format = Whole
+justification = Right
+prefixenabled = false
+suffixenabled = false
+
+[speed_unit]
+type = Static
+mode = 0
+xpos = 531.000000
+ypos = 66.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = UnitKmh
+
+[rpm]
+type = Number
+data = RPM
+mode = 0
+xpos = 528.000000
+ypos = 104.500000
+scale = 1.000000
+rotation = 0.000000
+colour = ffffffff
+font = SHD_Num
+format = Whole
+justification = Right
+prefixenabled = false
+suffixenabled = false
+
+[rpm_unit]
+type = Static
+mode = 0
+xpos = 531.000000
+ypos = 111.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = UnitRpm
+
+[water_label]
+type = Static
+mode = 0
+xpos = 18.000000
+ypos = 51.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = LabelWater
+
+[water]
+type = Number
+data = CoolantTemperatureC
+mode = 0
+xpos = 186.000000
+ypos = 50.779412
+scale = 0.441176
+rotation = 0.000000
+colour = ffffffff
+font = SHD_NumBold
+format = Whole
+justification = Right
+prefixenabled = false
+suffixenabled = false
+effect = coolanthot
+
+[water_unit]
+type = Static
+mode = 0
+xpos = 189.000000
+ypos = 51.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = UnitC
+
+[radwater_label]
+type = Static
+mode = 0
+xpos = 18.000000
+ypos = 84.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = LabelRadWater
+
+[radwater]
+type = Number
+data = RadiatorCoolantTemperatureC
+mode = 0
+xpos = 186.000000
+ypos = 83.779412
+scale = 0.441176
+rotation = 0.000000
+colour = ffffffff
+font = SHD_NumBold
+format = Whole
+justification = Right
+prefixenabled = false
+suffixenabled = false
+
+[radwater_unit]
+type = Static
+mode = 0
+xpos = 189.000000
+ypos = 84.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = UnitC
+
+[oil_label]
+type = Static
+mode = 0
+xpos = 18.000000
+ypos = 117.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = LabelOil
+
+[oil]
+type = Number
+data = OilTemperatureC
+mode = 0
+xpos = 186.000000
+ypos = 116.779412
+scale = 0.441176
+rotation = 0.000000
+colour = ffffffff
+font = SHD_NumBold
+format = Whole
+justification = Right
+prefixenabled = false
+suffixenabled = false
+effect = oilhot
+
+[oil_unit]
+type = Static
+mode = 0
+xpos = 189.000000
+ypos = 117.000000
+scale = 1.000000
+rotation = 0.000000
+colour = ff9aa4ae
+texture = UnitC
