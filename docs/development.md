@@ -157,6 +157,8 @@ SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR �
   Time (1,4) 240×98 / Delta (1,101) 240×98 / Stage (2,982) 240×98 / Engine (647,887) 624×208 /
   Inputs (1302,930) 310×150 / Brakes (1763,789) 156×123 / Tyres (1763,912) 156×168
   → タイム系は左上、Engine は下中央、Inputs とタイヤ系は右下。サイズを変えるときは周りとの兼ね合いに注意
+  （座標と大きさは SimHub の枠のもの。枠には透明な余白 `PAD`×倍率 が含まれるので、見えるパネルはひと回り小さい。
+  Engine の枠は画面下から約15px出るが、出るのはほぼ余白だけ。Brakes と Tyres は枠が接しているが、パネルの間には約12pxのすき間がある）
 - RBRHUD はリプレイ用オーバーレイ（`Replay_ShowInfo_Simple.ini`）に配置：Time・Delta は左上、Engine（倍率 0.75 に縮小）と Inputs は下中央
 
 ## 仮の値・確認状況
