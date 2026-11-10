@@ -52,7 +52,7 @@ def main() -> None:
     d.text((x + wa, base), b, font=word, fill=rgba(design.DIM), anchor="ls")
 
     sub = ImageFont.truetype(FONT_SUB, 30 * SS)
-    d.text((w / 2, 300 * SS), "illuminer  ·  heads-up display for sim racing", font=sub,
+    d.text((w / 2, 300 * SS), "heads-up display for sim racing  ·  by illuminer", font=sub,
            fill=rgba(design.DIM), anchor="mm")
 
     out = ROOT / "docs" / "images" / "logo.png"

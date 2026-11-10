@@ -2,10 +2,11 @@
 
 ![ILLMNR-HUD](docs/images/logo.png)
 
-**Illuminate what matters.**
+**Illuminate what matters.**  
+Heads-up display for sim racing, by illuminer.
 
-走りに必要な情報だけを、真っ黒なパネルにくっきりと。
-ILLMNR-HUD は、ひとつのデザインを SimHub と RBRHUD に書き出すシムレース用 HUD です。ゲームが変わっても、リプレイでも、同じ見た目で。
+走りに必要な情報だけを、真っ黒なパネルにくっきりと表示します。
+ILLMNR-HUD は、ひとつのデザインを SimHub と RBRHUD に書き出すシムレース用 HUD です。ゲームが変わっても、リプレイでも、同じ見た目で使える点がメリットです。
 
 ![RBR overlays](docs/images/rbr-overlays.png)
 
