@@ -45,6 +45,10 @@ RSF Launcher の空いている行に `127.0.0.1` : `6777` を追加し、SimHub
 
 ### RBRHUD 版（`dist/rbrhud/`）
 
+![RBRHUD in replay](docs/images/rbrhud-replay.png)
+
+リプレイ中の表示（Time・Delta・Engine・Inputs）。
+
 | エレメント | 表示 |
 |---|---|
 | `Custom/ILLMNR_Engine.element` | SimHub 版 Engine と同じ見た目。温度はゲームの警告で赤、シフトアップのタイミングでシフトライトが赤点滅 |
