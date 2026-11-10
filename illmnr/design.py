@@ -1,5 +1,6 @@
 """ILLMNR-HUD design: palette and shared layout. Used by every target (SimHub, RBRHUD, ...)."""
 
+PREFIX = "ILLMNR"  # illuminer: every overlay / element name starts with this (keeps them apart from others)
 AUTHOR = "ShotaroTaguchi"  # GitHub account, so the dashboards can be traced back to this repo
 
 # ---- colors (#AARRGGBB, SimHub format; RBRHUD uses hud()) ----

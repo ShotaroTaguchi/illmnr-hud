@@ -1,11 +1,11 @@
 """RBRHUD / RBR: engine element (works in replays, unlike the SimHub overlay).
 
     .venv/Scripts/python rbrhud/build_engine.py
-      -> dist/rbrhud/OverlayElements/textures/SHD_Engine.png + .ini   (texture atlas)
-      -> dist/rbrhud/OverlayElements/Custom/SHD_Engine.element         (element)
+      -> dist/rbrhud/OverlayElements/textures/ILLMNR_Engine.png + .ini   (texture atlas)
+      -> dist/rbrhud/OverlayElements/Custom/ILLMNR_Engine.element         (element)
 
 Copy dist/rbrhud/OverlayElements into  <RBR>/Plugins/RBRHUD/  and add
-"Custom/SHD_Engine.element" to an overlay with RBRHUD's in-game Overlay Editor.
+"Custom/ILLMNR_Engine.element" to an overlay with RBRHUD's in-game Overlay Editor.
 
 Same layout as simhub/rbr/build_engine.py (illmnr.design). Needs Pillow (requirements.txt).
 """
@@ -20,7 +20,7 @@ from illmnr import design
 from illmnr.design import ENGINE_H as PH, ENGINE_SIDE as SIDE, ENGINE_W as PW, hud
 
 ROOT = Path(__file__).resolve().parents[1] / "dist" / "rbrhud" / "OverlayElements"
-NAME = "SHD_Engine"
+NAME = f"{design.PREFIX}_Engine"
 S = 1.5  # pixel scale of the 1x layout (same default size as the SimHub overlay)
 
 FONT_BOLD = "C:/Windows/Fonts/segoeuib.ttf"
@@ -33,7 +33,8 @@ SHIFT_LIGHTS = [(threshold, hud(color)) for threshold, color in design.SHIFT_LIG
 # Number elements use bitmap fonts embedded in this element's own atlas (an element can only use
 # one atlas, so RBRHUD's built-in fonts such as Bahnschrift are not available here).
 # (font name, ttf, size at 1x)
-FONTS = {"SHD_NumBold": (FONT_BOLD, 34), "SHD_Num": (FONT_REG, 18)}
+NUM_BOLD, NUM = f"{design.PREFIX}_NumBold", f"{design.PREFIX}_Num"
+FONTS = {NUM_BOLD: (FONT_BOLD, 34), NUM: (FONT_REG, 18)}
 FONT_CHARS = " 0123456789-.:%+"
 
 
@@ -158,8 +159,8 @@ def main() -> None:
                        scale=scale, rotation=0.0, colour=WHITE, font=font, format="Whole",
                        justification="Right", prefixenabled="false", suffixenabled="false", **extra)
 
-    parts = [section("main", author="ShotaroTaguchi", atlas=f"textures\\{NAME}.ini",
-                     description="RBR Engine (simhub-dashboards style)",
+    parts = [section("main", author=design.AUTHOR, atlas=f"textures\\{NAME}.ini",
+                     description="ILLMNR RBR Engine",
                      autohidewhennodamage="false", autohidetime=5.0, type="simple")]
     # effects
     parts.append(section("upshift", type="Effect", effecttype="Blink|ColourChange|", data="UpShift",
@@ -187,9 +188,9 @@ def main() -> None:
 
     # right block: speed + rpm (numbers right-aligned at the value box's right edge)
     rx = PW - SIDE - 36 - 84
-    parts.append(number("speed", "SpeedKPH", "SHD_NumBold", 34, rx + 84, 30, 40))
+    parts.append(number("speed", "SpeedKPH", NUM_BOLD, 34, rx + 84, 30, 40))
     parts.append(section("speed_unit", **placed("Static", rx + 86, 44, DIM, texture="UnitKmh")))
-    parts.append(number("rpm", "RPM", "SHD_Num", 18, rx + 84, 70, 24))
+    parts.append(number("rpm", "RPM", NUM, 18, rx + 84, 70, 24))
     parts.append(section("rpm_unit", **placed("Static", rx + 86, 74, DIM, texture="UnitRpm")))
 
     # left block: temperatures
@@ -200,7 +201,7 @@ def main() -> None:
         y = 34 + i * 22
         parts.append(section(f"{key}_label", **placed("Static", SIDE, y, DIM, texture=label)))
         extra = {"effect": effect} if effect else {}
-        parts.append(number(key, data, "SHD_NumBold", 15, SIDE + 112, y, 20, **extra))
+        parts.append(number(key, data, NUM_BOLD, 15, SIDE + 112, y, 20, **extra))
         parts.append(section(f"{key}_unit", **placed("Static", SIDE + 114, y, DIM, texture="UnitC")))
 
     out = ROOT / "Custom"

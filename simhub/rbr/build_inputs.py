@@ -1,6 +1,6 @@
 """Build the RBR (NGP UDP) driver input overlay: steering wheel + pedals.
 
-    python simhub/rbr/build_inputs.py   ->  dist/simhub/rbr/RBR_Inputs.simhubdash
+    python simhub/rbr/build_inputs.py   ->  dist/simhub/rbr/ILLMNR_RBR_Inputs.simhubdash
 """
 import sys
 from pathlib import Path

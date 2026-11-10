@@ -1,6 +1,6 @@
 """Build the RBR stage time and delta overlays (same size, place them freely).
 
-    python simhub/rbr/build_time.py   ->  dist/simhub/rbr/RBR_Time.simhubdash, RBR_Delta.simhubdash
+    python simhub/rbr/build_time.py   ->  dist/simhub/rbr/ILLMNR_RBR_Time.simhubdash, ILLMNR_RBR_Delta.simhubdash
 """
 import sys
 from pathlib import Path

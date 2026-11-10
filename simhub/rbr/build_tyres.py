@@ -1,6 +1,6 @@
 """Build the RBR (NGP UDP) tyre overlay: 4 tiles colored by tread temperature.
 
-    python simhub/rbr/build_tyres.py   ->  dist/simhub/rbr/RBR_Tyres.simhubdash
+    python simhub/rbr/build_tyres.py   ->  dist/simhub/rbr/ILLMNR_RBR_Tyres.simhubdash
 """
 import sys
 from pathlib import Path

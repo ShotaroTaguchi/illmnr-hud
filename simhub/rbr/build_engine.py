@@ -1,6 +1,6 @@
 """SimHub / RBR: engine overlay (shift lights, gear, speed, rpm, temperatures).
 
-    python simhub/rbr/build_engine.py   ->  dist/simhub/rbr/RBR_Engine.simhubdash
+    python simhub/rbr/build_engine.py   ->  dist/simhub/rbr/ILLMNR_RBR_Engine.simhubdash
 """
 import sys
 from pathlib import Path

@@ -2,28 +2,37 @@
 
 ## 仕組み
 
-Dash Studio で手作業で組まず、Python で SimHub のダッシュボードファイル（`.djson`）を生成している。
+1つのデザイン（`illmnr/design.py`）を、出力先ごとのビルドスクリプトでファイルに書き出す。
+Dash Studio や RBRHUD のエディタで手作業で組まない。
 
 ```
-tools/
-├── simhubdash.py          # 共通部品：rect / text / ellipse / vbar / layer、formula / gradient、zip 出力
-├── rbr_common.py          # RBR 用の配色・プロパティ名・build()
-└── build_rbr_<name>.py    # オーバーレイ定義（1ファイル = 1オーバーレイ）
+illmnr/                    # 共通パッケージ
+├── design.py              # デザインの本体：配色、PREFIX/AUTHOR、Engine パネルの寸法、シフトライト
+├── simhubdash.py          # SimHub 用部品：rect / text / ellipse / vbar / hbar / layer、formula / gradient、zip 出力
+└── rbr.py                 # SimHub × RBR：NGP のプロパティ名、build()
+simhub/<game>/build_*.py   # SimHub 版（1ファイル = 1オーバーレイ。Time/Delta だけ1ファイルで2つ）
+rbrhud/build_*.py          # RBRHUD 版
 dist/                      # 生成物。公開用にコミットする
+├── simhub/<game>/ILLMNR_<GAME>_<Name>.simhubdash
+└── rbrhud/OverlayElements/{Custom,textures}/ILLMNR_<Name>.*
+build.py                   # 全部ビルド
 ```
 
 ```
-python tools/build_rbr_engine.py    # -> dist/RBR_Engine.simhubdash
-python tools/build_rbr_tyres.py     # -> dist/RBR_Tyres.simhubdash
-python tools/build_rbr_inputs.py    # -> dist/RBR_Inputs.simhubdash
-python tools/build_rbr_time.py      # -> dist/RBR_Time.simhubdash, dist/RBR_Delta.simhubdash
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt   # 初回のみ（RBRHUD に Pillow が必要）
+.venv/Scripts/python build.py                                           # 全部
+.venv/Scripts/python simhub/rbr/build_engine.py                         # 個別
 ```
 
-Python 3.10+、標準ライブラリのみ。同名のダッシュボードを取り込むと上書きされる（SimHub が旧版をバックアップする）。
+- 名前はすべて `illmnr.design.PREFIX`（`ILLMNR`）で始める。ほかの人の配布物と混ざらないように
+- 生成は決定的（zip の時刻固定・UUID は名前から生成）。中身が変わらなければ同じファイルになる
+- 構成を変えたときは、生成物のチェックサムが変わらないことで確認できる
 
-### 新しいオーバーレイを足す
+## SimHub
 
-1. `tools/build_<name>.py` を作る（既存の `build_rbr_*.py` を雛形に）
+### 新しいオーバーレイ・ゲームを足す
+
+1. `simhub/<game>/build_<name>.py` を作る（既存を雛形に。ゲーム固有のプロパティ名は `illmnr/<game>.py` に）
 2. 値は SimHub のプロパティ式（NCalc）で書く。例：`[DataCorePlugin.GameData.NewData.Gear]`
 3. 色を値で変えるときは `gradient()`（2〜3色の補間）、回転は `rect(..., rotation=式)`（自身の中心で回る）
 4. レイアウトは1倍で書き、既定サイズは `build(..., sx=, sy=)` の倍率で決める（文字・角丸・線幅は小さいほうの倍率）
@@ -36,29 +45,62 @@ Python 3.10+、標準ライブラリのみ。同名のダッシュボードを�
 - ハンドルのスポークやマークは「中心を揃えた四角の、片側の枠線だけ描く」ことで、回転の中心をハンドル中心に合わせている
 - 四角の `Width` を式で動かしても SimHub 9.13 では反映されなかった。伸び縮みするバーはゲージ（`vbar` / `hbar`）で作る
   - `hbar(from_right=True)` で右から左へ伸びる（Delta の赤いバー）
-- `.simhubdash` の zip は時刻を固定して書き出すので、中身が変わらなければ同じファイルになる
 
-## RBR オーバーレイの調整用定数
+## RBRHUD
+
+RSF 同梱の RBRHUD プラグイン（`<RBR>/Plugins/RBRHUD/`）のエレメントを生成する。ゲーム内に描画するのでリプレイでも動く。
+
+```
+OverlayElements/
+├── textures/<Atlas>.png + .ini   # アトラス：部品画像1枚 + 「名前=x,y,幅,高さ」。フォントもここに入る
+└── Custom/*.element              # エレメント（ini 形式）：[main] + 部品ごとのセクション
+Overlays/*.ini                    # どのエレメントをどこに出すか（走行用・リプレイ用。rbrhud.ini で選択）
+```
+
+### 分かったこと（作ってみて）
+
+- **アトラスは縦横とも2の累乗**（1024×512 など）。半端なサイズだと切り出しがずれて崩れる
+- **フォントはアトラスの中のビットマップ**。`[フォント名]` セクションに `charset=x,y,幅,高さ`（アトラス内の範囲）と `文字コード=x,y,幅,高さ`（範囲内の位置）。
+  1エレメントは1アトラスしか使えないので、`Bahnschrift` など同梱フォントは自分のアトラスに無いと使えない（「Failed to create drawable number object」）。
+  → `build_engine.py` が Segoe UI で数字フォントを描いて埋め込む（大きさも SimHub 版と一致する）
+- 部品の種類：`Static`（固定画像）、`Simple`（条件で表示：`equal = n`、`rangemin / rangemax`）、`Number`（`font` / `format` / `justification`）、
+  `Expanding`、`Rotating`、`Colour`（`value0..2 / colour0..2`）、`Pie`
+- 効果は `type = Effect` のセクションで定義して部品の `effect =` で参照：`Blink|`、`ColourChange|`、`Show|`、`Hide|`、`Pulse|`（`data` が真のとき）
+- 色は `aarrggbb`（小文字・`#` なし）。白で描いた画像に `colour` で色を付けられる
+- `Number` の `justification = Right` は `xpos` が右端
+- データ名（DLL から抽出）：`RPM`、`RPMPercent`、`UpShift`、`Gear`（0=R, 1=N, 2=1速…）、`SpeedKPH`、`RaceTime`、`DeltaTime`、
+  `CoolantTemperatureC`、`RadiatorCoolantTemperatureC`、`OilTemperatureC`、`*Warning`、`Input*Processed`、`InputSteeringDeg`、
+  `TireHealth{LF,RF,LR,RR}{Avg,Worst}`、`Damage*`、`DistanceDriven*`、`DistanceToFinish*`、`RSF.*` など。**タイヤ温度・空気圧は無い**
+
+### 新しいエレメントを足す
+
+`rbrhud/build_engine.py` を雛形に、SimHub 版と同じ1倍レイアウト（`illmnr.design`）から作る。
+次の候補：Inputs（既存の `Default/InputDisplay.element` の `Rotating` / `Expanding` が参考になる）、Time / Delta。
+
+## 調整用の定数
 
 | ファイル | 定数 | 内容 | 既定 |
 |---|---|---|---|
-| `build_rbr_engine.py` | `SCALE_X / SCALE_Y` | 既定サイズの倍率（レイアウトは1倍で記述） | 1.5 / 1.6 |
-| | `SHIFT_LIGHTS` | シフトライトの点灯％と色 | 55〜95% |
+| `illmnr/design.py` | 色、`PREFIX`、`AUTHOR` | 全出力先共通 | |
+| | `SHIFT_LIGHTS` | シフトライトの点灯％と色（SimHub / RBRHUD 共通） | 55〜95% |
+| | `ENGINE_W / H / SIDE` | Engine パネルの1倍レイアウト | 400 / 114 / 12 |
+| `simhub/rbr/build_engine.py` | `SCALE_X / SCALE_Y` | 既定サイズの倍率 | 1.5 / 1.6 |
 | | `WATER_OK / WATER_HOT` | 水温の文字色：白になる温度 / 赤になる温度（℃。OK−30℃で青） | 90 / 110 |
 | | `OIL_OK / OIL_HOT` | 油温の文字色（同上） | 110 / 130 |
-| `build_rbr_tyres.py` | `SCALE` | 既定サイズの倍率 | 0.75 |
+| `simhub/rbr/build_tyres.py` | `SCALE` | 既定サイズの倍率 | 0.75 |
 | | `TYRE_COLD / OK / HOT` | タイヤ色の境目（℃） | 40 / 70 / 100 |
-| `build_rbr_inputs.py` | `STEER_LOCK_DEG` | ハンドル表示の回転角（ロック to ロック） | 540 |
+| `simhub/rbr/build_inputs.py` | `STEER_LOCK_DEG` | ハンドル表示の回転角（ロック to ロック） | 540 |
 | | `STEER_SIGN` | 回転方向（逆なら -1） | 1 |
-| `build_rbr_time.py` | `SCALE` | Time / Delta の既定サイズの倍率 | 1.2 |
+| `simhub/rbr/build_time.py` | `SCALE` | Time / Delta の既定サイズの倍率 | 1.2 |
 | | `DELTA_RANGE` | Delta の数字が完全な緑／赤になる差（秒） | 1.0 |
 | | `DELTA_BAR_RANGE` | Delta のバーが端まで伸びる差（秒、比例） | 10.0 |
-| `rbr_common.py` | 色定数・`AUTHOR` | 全オーバーレイ共通 | |
+| `rbrhud/build_engine.py` | `S` | 1倍レイアウトに掛ける倍率（SimHub 版と同じ大きさ） | 1.5 |
 
-### RBR（NGP）のプロパティ
+## RBR（NGP）のプロパティ（SimHub）
 
 NGP は 664 バイトの UDP パケットを送り、SimHub では全項目が `GameRawData.NGPTelemetry.<パス>` で読める。
-構造の定義元：[mika-n/RBRUDPTelemetryLogger](https://github.com/mika-n/RBRUDPTelemetryLogger)（`TelemetryData.h`）
+構造の定義元：[mika-n/RBRUDPTelemetryLogger](https://github.com/mika-n/RBRUDPTelemetryLogger)（`TelemetryData.h`）。
+**リプレイ中は送られない**（実機で確認）。
 
 | 項目 | パス | 単位 |
 |---|---|---|
@@ -87,5 +129,5 @@ SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR �
 
 ## TODO
 
-- オーバーレイ名が `RBR_*` だと、ほかの人が配布している RBR 用ダッシュボードと SimHub 上で混ざる。固有の接頭辞を付けて改名する（ファイル名・タイトル・README を合わせて変更）
-- リプレイ中も表示できる RBRHUD 版を作る（方向性は [rbrhud.md](rbrhud.md)）
+- RBRHUD 版の Inputs / Time / Delta
+- ほかのゲームの SimHub 版（`simhub/<game>/`）
