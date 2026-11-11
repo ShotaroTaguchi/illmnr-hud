@@ -3,7 +3,7 @@
     .venv/Scripts/python rbrhud/build_engine.py
       -> dist/rbrhud/OverlayElements/{Custom/ILLMNR_Engine.element, textures/ILLMNR_Engine.png + .ini}
 
-Same layout as simhub/rbr/build_engine.py (illmnr.design). Needs Pillow (requirements.txt).
+Same layout as simhub/build_engine.py (illmnr.design). Needs Pillow (requirements.txt).
 """
 import sys
 from pathlib import Path

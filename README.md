@@ -70,6 +70,14 @@ Tyres は RBRHUD にタイヤ温度・空気圧のデータが無いので、Sim
 
 アンインストールは、`Custom/` と `textures/` の `ILLMNR_*` を消すだけ。
 
+## Assetto Corsa（試作・未確認）
+
+### SimHub 版（`dist/simhub/ac/`）
+
+RBR 版と同じ7つ（`ILLMNR_AC_Engine` など）。SimHub の標準の値だけを使う。
+まだ実機で確かめていない。標準の値に無いもの（カーカス温度・タイヤ内部温度、ラジエーター水温、ブレーキの摩耗、ハンドルの回転）は「--」になる。
+Time と Stage は周回タイムと、周回の残り距離を出す。
+
 ## 自分で改造する
 
 レイアウト・色・しきい値は Python で生成している。詳しくは [docs/development.md](docs/development.md)。

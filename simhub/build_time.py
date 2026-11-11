@@ -1,14 +1,14 @@
-"""Build the RBR stage time and delta overlays (same size, place them freely).
+"""SimHub: stage time, delta and stage progress overlays (same size, place them freely), one set per game.
 
-    python simhub/rbr/build_time.py   ->  dist/simhub/rbr/ILLMNR_RBR_Time.simhubdash, ILLMNR_RBR_Delta.simhubdash
+    python simhub/build_time.py   ->  dist/simhub/<game>/ILLMNR_<GAME>_Time / _Delta / _Stage.simhubdash
 """
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root, for the illmnr package
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # repo root, for the illmnr package
 
 from illmnr.design import DIM, GREEN, PAD, PANEL, RED, SMALL_H, SMALL_W, TRACK, WHITE
-from illmnr.rbr import RAW, build
+from illmnr.game import Game, games
 from illmnr.simhubdash import formula, gradient, hbar, layer, rect, text
 
 # ---- tuning ----
@@ -18,7 +18,6 @@ DELTA_BAR_RANGE = 10.0  # seconds at which the delta bar reaches the end
 
 PW, PH = SMALL_W, SMALL_H  # panel size (1x), shared with rbrhud/build_time.py
 W, H = PW + 2 * PAD, PH + 2 * PAD
-DELTA = "[PersistantTrackerPlugin.AllTimeBestLiveDeltaSeconds]"  # SimHub: live delta to all-time best
 
 
 def panel(name: str, label: str, value: list[dict]) -> dict:
@@ -30,10 +29,10 @@ def panel(name: str, label: str, value: list[dict]) -> dict:
     ], x0, y0, PW, PH)
 
 
-def stage_progress() -> dict:
+def stage_progress(g: Game) -> dict:
     """Distance left to the finish (big) and how much of the stage is done (bar + %)."""
-    driven = f"[{RAW}.stage.progress]"
-    left = f"[{RAW}.stage.distanceToEnd]"
+    driven = g.get("driven_m")
+    left = g.get("left_m")
     pct = f"if({driven} + {left} > 0, {driven} / ({driven} + {left}) * 100, 0)"
     bx, by, bw, bh = PAD + 12, PAD + PH - 12, PW - 24, 5
     return panel("stage", "STAGE", [
@@ -45,9 +44,9 @@ def stage_progress() -> dict:
     ])
 
 
-def stage_time() -> dict:
+def stage_time(g: Game) -> dict:
     # tenths are truncated (not rounded) so 59.96 s never shows as "00:60.0"
-    tenths = f"floor([{RAW}.stage.raceTime] * 10)"
+    tenths = f"floor({g.get('time_s')} * 10)"
     minutes = f"floor({tenths} / 600)"
     expr = f"format({minutes}, '00') + ':' + format(({tenths} - {minutes} * 600) / 10, '00.0')"
     return panel("time", "TIME", [
@@ -56,9 +55,10 @@ def stage_time() -> dict:
     ])
 
 
-def delta() -> dict:
-    d = f"isnull({DELTA}, 0)"
-    expr = f"if(isnull({DELTA}), '--.--', if({DELTA} > 0, '+', '') + format({DELTA}, '0.00'))"
+def delta(g: Game) -> dict:
+    delta_s = g.get("delta_s")
+    d = f"isnull({delta_s}, 0)"
+    expr = f"if(isnull({delta_s}), '--.--', if({delta_s} > 0, '+', '') + format({delta_s}, '0.00'))"
 
     # bar: faster (negative delta) -> green grows to the right, slower (positive) -> red grows to the left.
     # Two gauges meet at the center; linear, DELTA_BAR_RANGE seconds = full half (1 s of 10 s -> 10%).
@@ -80,9 +80,8 @@ def delta() -> dict:
 
 
 if __name__ == "__main__":
-    build("RBR_Time", "RBR Time", "Stage time for Richard Burns Rally (NGP UDP telemetry)",
-          W, H, [stage_time()], sx=SCALE)
-    build("RBR_Delta", "RBR Delta", "Live delta to best time for Richard Burns Rally",
-          W, H, [delta()], sx=SCALE)
-    build("RBR_Stage", "RBR Stage", "Distance to finish and stage progress for Richard Burns Rally",
-          W, H, [stage_progress()], sx=SCALE)
+    for g in games():
+        g.build("Time", "Stage time", W, H, [stage_time(g)], sx=SCALE)
+        g.build("Delta", "Live delta to best time", W, H, [delta(g)], sx=SCALE, with_source=False)
+        g.build("Stage", "Distance to finish and stage progress", W, H, [stage_progress(g)], sx=SCALE,
+                with_source=False)
