@@ -9,9 +9,11 @@ Dash Studio や RBRHUD のエディタで手作業で組まない。
 illmnr/                    # 共通パッケージ
 ├── design.py              # デザインの本体：配色、PREFIX/AUTHOR、Engine パネルの寸法、シフトライト
 ├── simhubdash.py          # SimHub 用部品：rect / text / ellipse / vbar / hbar / layer、formula / gradient、zip 出力
-├── rbr.py                 # SimHub × RBR：NGP のプロパティ名、build()
+├── game.py                # SimHub のゲーム共通：値のキー一覧（単位つき）、Game（対応表＋build()）、games()
+├── rbr.py                 # SimHub × RBR の対応表：NGP（K→℃、Pa→kPa に変換して渡す）
+├── ac.py                  # SimHub × Assetto Corsa の対応表：標準プロパティのみ（実機未確認）
 └── rbrhud.py              # RBRHUD 用：Element（アトラス生成・数字フォント埋め込み・.element 出力）
-simhub/<game>/build_*.py   # SimHub 版（1ファイル = 1オーバーレイ。Time/Delta だけ1ファイルで2つ）
+simhub/build_*.py          # SimHub 版。全ゲーム分を書き出す（1ファイル = 1パネル。Time/Delta/Stage だけ1ファイルで3つ）
 rbrhud/build_*.py          # RBRHUD 版
 dist/                      # 生成物。公開用にコミットする
 ├── simhub/<game>/ILLMNR_<GAME>_<Name>.simhubdash
@@ -23,7 +25,7 @@ docs/make_logo.py          # README のロゴ（design の色から生成）
 ```
 python -m venv .venv && .venv/Scripts/pip install -r requirements.txt   # 初回のみ（RBRHUD に Pillow が必要）
 .venv/Scripts/python build.py                                           # 全部
-.venv/Scripts/python simhub/rbr/build_engine.py                         # 個別
+.venv/Scripts/python simhub/build_engine.py                         # 個別
 ```
 
 - 名前はすべて `illmnr.design.PREFIX`（`ILLMNR`）で始める。ほかの人の配布物と混ざらないように
@@ -32,12 +34,26 @@ python -m venv .venv && .venv/Scripts/pip install -r requirements.txt   # 初回
 
 ## SimHub
 
-### 新しいオーバーレイ・ゲームを足す
+### ゲームごとの対応表
 
-1. `simhub/<game>/build_<name>.py` を作る（既存を雛形に。ゲーム固有のプロパティ名は `illmnr/<game>.py` に）
+パネル（`simhub/build_*.py`）はプロパティ名を直接書かず、`game.get("tyre_tread.FL")` のようにキーで値を受け取る。
+キーと単位の一覧は `illmnr/game.py` の先頭。各ゲームの `illmnr/<game>.py` が、キーを SimHub の式（変換済み）に対応づける。
+対応づけていないキーは `None` になり、パネルは「--」や空のバーを出す（レイアウトはゲームによらず同じ）。
+常駐プログラムで変換する案もあったが、ビルド時に変換すれば追加のインストールが要らず、Web（Linux）でもビルドできるのでこちらにした。
+ただし今はゲームごとに別のファイルができ、使う人はゲームを替えるたびに切り替える必要がある。公開時には `CurrentGame` で切り替える1ファイル版にする予定（Issue #4）。
+
+### 新しいゲームを足す
+
+1. `illmnr/<game>.py` に対応表を作る（`ac.py` が雛形。共通の値は `STANDARD` をそのまま使える）
+2. `illmnr/game.py` の `games()` に足す → `dist/simhub/<game>/ILLMNR_<GAME>_<Name>.simhubdash` が出る
+3. 実走で確認 → README に追記
+
+### 新しいパネルを足す
+
+1. `simhub/build_<name>.py` を作る（既存を雛形に）。新しい値が要るなら `illmnr/game.py` の一覧にキーを足し、各ゲームの対応表にも足す
 2. 値は SimHub のプロパティ式（NCalc）で書く。例：`[DataCorePlugin.GameData.NewData.Gear]`
 3. 色を値で変えるときは `gradient()`（2〜3色の補間）、回転は `rect(..., rotation=式)`（自身の中心で回る）
-4. レイアウトは1倍で書き、既定サイズは `build(..., sx=, sy=)` の倍率で決める（文字・角丸・線幅は小さいほうの倍率）
+4. レイアウトは1倍で書き、既定サイズは `game.build(..., sx=, sy=)` の倍率で決める（文字・角丸・線幅は小さいほうの倍率）
 5. ビルド → 取り込み → 実走で確認 → README に追記
 
 ### 注意
@@ -90,17 +106,17 @@ Overlays/*.ini                    # どのエレメントをどこに出すか�
 | `illmnr/design.py` | 色、`PREFIX`、`AUTHOR` | 全出力先共通 | |
 | | `SHIFT_LIGHTS` | シフトライトの点灯％と色（SimHub / RBRHUD 共通） | 55〜95% |
 | | `ENGINE_W / H / SIDE` | Engine パネルの1倍レイアウト | 400 / 114 / 12 |
-| `simhub/rbr/build_engine.py` | `SCALE_X / SCALE_Y` | 既定サイズの倍率 | 1.5 / 1.6 |
+| `simhub/build_engine.py` | `SCALE_X / SCALE_Y` | 既定サイズの倍率 | 1.5 / 1.6 |
 | | `WATER_OK / WATER_HOT` | 水温の文字色：白になる温度 / 赤になる温度（℃。OK−30℃で青） | 90 / 110 |
 | | `OIL_OK / OIL_HOT` | 油温の文字色（同上） | 110 / 130 |
-| `simhub/rbr/build_tyres.py` | `SCALE` | 既定サイズの倍率 | 0.75 |
+| `simhub/build_tyres.py` | `SCALE` | 既定サイズの倍率 | 0.75 |
 | | `TYRE_COLD / OK / HOT` | タイヤ色の境目（℃） | 40 / 70 / 100 |
-| `simhub/rbr/build_inputs.py` | `STEER_LOCK_DEG` | ハンドル表示の回転角（ロック to ロック） | 540 |
+| `simhub/build_inputs.py` | `STEER_LOCK_DEG` | ハンドル表示の回転角（ロック to ロック） | 540 |
 | | `STEER_SIGN` | 回転方向（逆なら -1） | 1 |
-| `simhub/rbr/build_time.py` | `SCALE` | Time / Delta の既定サイズの倍率 | 1.2 |
+| `simhub/build_time.py` | `SCALE` | Time / Delta の既定サイズの倍率 | 1.2 |
 | | `DELTA_RANGE` | Delta の数字が完全な緑／赤になる差（秒） | 1.0 |
 | | `DELTA_BAR_RANGE` | Delta のバーが端まで伸びる差（秒、比例） | 10.0 |
-| `simhub/rbr/build_brakes.py` | `BRAKE_COLD / OK / HOT` | ブレーキ色の境目（℃。仮の値） | 150 / 350 / 650 |
+| `simhub/build_brakes.py` | `BRAKE_COLD / OK / HOT` | ブレーキ色の境目（℃。仮の値） | 150 / 350 / 650 |
 | `rbrhud/build_*.py` | `S` | 1倍レイアウトに掛ける倍率（SimHub 版と同じ大きさ） | Engine 1.5、Time/Delta 1.2、Inputs 1.0 |
 | `rbrhud/build_time.py` | `DELTA_BAR_RANGE` | Delta のバーが端まで伸びる差（秒） | 10.0 |
 
@@ -135,6 +151,26 @@ NGP は 664 バイトの UDP パケットを送り、SimHub では全項目が `
 SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR で動作確認済み）：
 `Gear`、`SpeedKmh`、`Rpms`、`CarSettings_CurrentDisplayedRPMPercent`（車ごとのレッドライン基準の％）、`CarSettings_RPMRedLineReached`
 
+## Assetto Corsa のプロパティ（SimHub、実機未確認）
+
+初代 AC。SimHub が共有メモリを読み、標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下）に入れる。`illmnr/ac.py` は標準プロパティだけを使う。
+**名前はすべて記憶に基づくもので、まだ SimHub のプロパティ一覧で確かめていない。**
+
+| キー | プロパティ | 確かめること |
+|---|---|---|
+| 水温 / 油温 | `WaterTemperature` / `OilTemperature` | AC が値を出すか（出さないと 0 のまま） |
+| タイヤ温度 | `TyreTemperatureFrontLeft` など | 平均温度か |
+| 空気圧 | `TyrePressureFrontLeft` など | 単位（psi と仮定） |
+| タイヤの残り | `100 - TyreWearFrontLeft` など | 摩耗（0＝新品）か残り（100＝新品）か |
+| ブレーキ温度 | `BrakeTemperatureFrontLeft` など | |
+| ペダル | `Throttle / Brake / Clutch / Handbrake` | 0〜100 か。`Handbrake` があるか |
+| タイム | `timespantoseconds(CurrentLapTime)` | 周回タイム。関数が使えるか |
+| 残り距離 | `TrackPositionPercent`（0〜1）× `TrackLength`（m） | 周回の残り。範囲と単位 |
+| Delta | `PersistantTrackerPlugin.AllTimeBestLiveDeltaSeconds` | RBR と同じ |
+
+標準に無いので出していないもの（「--」表示）：カーカス温度・タイヤ内部温度、ラジエーター水温、ブレーキの摩耗、ステア角（ハンドルは回らない）。
+生データ（`GameRawData.Physics.*` など）を使えば出せるものもあるが、まずは標準だけで試す。
+
 ## デザインの経緯（決めたことと、やめた案）
 
 照太郎が実機で見て決めたこと。理由ごと残しておく。
@@ -168,7 +204,7 @@ SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR �
 - RBRHUD の Time・Delta・Engine・Inputs はリプレイ中の表示を確認済み（Delta は 0.00 の状態のみ。差が付いたときの色とバーの向きは未確認）。
   Inputs のハンドルが上の縁に当たっていたのは修正済みだが、修正後の表示は未確認
 - サスペンション（`springDeflection`）と G（`accelerations`）は**実データを一度も見ていない**（範囲・単位・符号の向きは不明）
-- 次に作るゲームはまだ決めていない（プロパティの調査も未着手）。リリースは v0.1.0 のみ
+- Assetto Corsa（初代）の SimHub 版を試作中（標準プロパティのみ、実機未確認）。リリースは v0.1.0 のみ
 
 ## メンテナンスのメモ
 
@@ -179,11 +215,12 @@ SimHub 標準プロパティ（`DataCorePlugin.GameData.NewData.` 以下、RBR �
 - README の画面写真（`docs/images/rbr-overlays.png`、`rbrhud-replay.png`）は実機のスクリーンショット。見た目を変えたら撮り直す
 - **名前を変えると、置いた位置が外れる**：SimHub はレイアウト（`OverlayLayouts/*.olayout`）が `DashTemplates\<名前>\<名前>.djson` で、
   RBRHUD はオーバーレイ（`Plugins/RBRHUD/Overlays/*.ini`）が `Custom/<名前>.element` で参照している。改名するときはこの参照も書き換える
-- リリース：`build.py` → コミット → `gh release create vX.Y.Z dist/rbrhud/ILLMNR-HUD_RBRHUD.zip dist/simhub/rbr/*.simhubdash`
+- リリース：`build.py` → コミット → `gh release create vX.Y.Z dist/rbrhud/ILLMNR-HUD_RBRHUD.zip dist/simhub/*/*.simhubdash`
 - コミットのメールは GitHub の匿名アドレス（このリポジトリと PC 全体の git 設定で指定済み）
 
 ## TODO
 
 - 実機で確認：RBRHUD の Delta（差が付いたときの色とバーの向き）と Inputs（修正後の位置）、SimHub の Brakes（温度の範囲、摩耗の向き）
 - 候補：サスペンションのストローク、G（単位と向きを実データで確かめてから）
-- ほかのゲームの SimHub 版（`simhub/<game>/`）
+- Assetto Corsa の SimHub 版を実機で確認（プロパティ名、単位、「--」になる項目）
+- ほかのゲームの SimHub 版（`illmnr/<game>.py` に対応表を足す）

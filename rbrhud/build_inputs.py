@@ -16,7 +16,7 @@ from illmnr.design import (BLUE, DIM, GREEN, INPUTS_H, INPUTS_W, ORANGE, PEDAL_G
 from illmnr.rbrhud import FONT_BOLD, Element
 
 S = 1.0
-PW, PH = INPUTS_W, INPUTS_H  # panel-relative layout shared with simhub/rbr/build_inputs.py
+PW, PH = INPUTS_W, INPUTS_H  # panel-relative layout shared with simhub/build_inputs.py
 CX, CY = WHEEL_CX, WHEEL_CY
 PEDALS = [("CLU", "InputClutchProcessed", BLUE), ("BRK", "InputBrakeProcessed", RED),
           ("THR", "InputThrottleProcessed", GREEN), ("HB", "InputHandbrakeProcessed", ORANGE)]

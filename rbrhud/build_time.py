@@ -14,7 +14,7 @@ from illmnr.rbrhud import FONT_BOLD, Element
 
 S = 1.2                # same default size as the SimHub Time / Delta
 DELTA_BAR_RANGE = 10.0  # seconds at which the delta bar reaches the end
-PW, PH = SMALL_W, SMALL_H  # panel (1x), shared with simhub/rbr/build_time.py
+PW, PH = SMALL_W, SMALL_H  # panel (1x), shared with simhub/build_time.py
 
 
 def panel(name: str, label: str) -> Element:

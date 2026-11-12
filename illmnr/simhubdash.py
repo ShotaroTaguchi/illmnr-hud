@@ -248,5 +248,6 @@ def write_simhubdash(dash: dict, meta: dict, name: str, out_dir: Path) -> Path:
             # fixed timestamp: unchanged dashboards produce byte-identical files (clean git diffs)
             info = zipfile.ZipInfo(arcname, date_time=(2020, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED
+            info.create_system = 0  # as on Windows, so Linux builds match too
             z.writestr(info, data)
     return path
